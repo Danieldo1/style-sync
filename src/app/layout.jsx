@@ -1,6 +1,7 @@
 import { Josefin_Sans, Prompt } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import Nav from "@/components/Nav";
 
 const josefsans = Josefin_Sans({
   style: ["normal", "italic"],
@@ -25,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${josefsans.className} ${prompt.variable}`}>
         <ThemeProvider
           attribute="class"
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
+          <Nav />
           {children}
         </ThemeProvider>
       </body>
