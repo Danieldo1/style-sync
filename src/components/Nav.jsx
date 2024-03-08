@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DarkModeSwitchCustom from "./ThemeToggler";
 
 const navLinks = [
   {
@@ -22,8 +23,9 @@ const Nav = () => {
       <div className="flex items-center relative z-10">
         <p className="text-xl font-bold">LOGO</p>
       </div>
-      <nav>
+      <nav >
         <ul className="flex items-center space-x-4 relative z-10">
+          <DarkModeSwitchCustom />
           {navLinks.map((link) => (
             <li key={link.name} className="px-2 md:px-4">
               <Link href={link.path} className="hover:underline">
