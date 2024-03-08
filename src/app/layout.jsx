@@ -1,6 +1,8 @@
 import { Josefin_Sans, Prompt } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import SessionWrapper from "../components/SessionWrapper";
+
 import Nav from "@/components/Nav";
 
 const josefsans = Josefin_Sans({
@@ -26,8 +28,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <SessionWrapper>
     <html lang="en" suppressHydrationWarning>
-      <body className={`${josefsans.className} ${prompt.variable}`}>
+      <body className={`${josefsans.variable} ${prompt.className}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -39,5 +42,6 @@ export default function RootLayout({ children }) {
         </ThemeProvider>
       </body>
     </html>
+    </SessionWrapper>
   );
 }

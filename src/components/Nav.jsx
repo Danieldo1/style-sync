@@ -1,40 +1,46 @@
+"use client";
+
+import { useSession, signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import DarkModeSwitchCustom from "./ThemeToggler";
-
-const navLinks = [
-  {
-    name: "Home",
-    path: "/",
-  },
-  {
-    name: "About",
-    path: "/about",
-  },
-  {
-    name: "Contact",
-    path: "/contact",
-  },
-];
+import { Button } from "./ui/button";
 
 const Nav = () => {
+  const { data: session } = useSession();
+
   return (
-    <header className="flex justify-between items-center container mx-auto py-4 z-30 relative backdrop-filter backdrop-blur-md bg-opacity-75">
-      <div className="absolute inset-0 bg-white backdrop-blur-md z-0 bg-opacity-25"></div>
-      <div className="flex items-center relative z-10">
-        <p className="text-xl font-bold">LOGO</p>
+    <header className="sticky top-0 z-10 bg-muted-foreground/30 py-4 backdrop-filter backdrop-blur-lg border-b border-gray-100">
+      <div className="flex items-center container mx-auto justify-between    ">
+        <Link href={"/"} className="text-xl font-bold text1">StyleSync</Link>
+        <nav>
+          <ul className="flex items-center space-x-4 ">
+            <DarkModeSwitchCustom />
+            {session ? (
+              <>
+                <li>
+                  <Link href="/dashboard">
+                    <div className="w-[30px] h-[30px] relative ">
+                      <Image
+                        src={session.user?.image}
+                        fill
+                        alt=""
+                        className="object-cover rounded-full"
+                      />
+                    </div>
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Button onClick={() => signIn("google")}>Sign in</Button>
+                </li>
+              </>
+            )}
+          </ul>
+        </nav>
       </div>
-      <nav >
-        <ul className="flex items-center space-x-4 relative z-10">
-          <DarkModeSwitchCustom />
-          {navLinks.map((link) => (
-            <li key={link.name} className="px-2 md:px-4">
-              <Link href={link.path} className="hover:underline">
-                {link.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </header>
   );
 };
