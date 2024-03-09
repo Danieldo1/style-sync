@@ -54,6 +54,7 @@ export const DashboardNav = () => {
           <div className="flex flex-col h-full justify-between">
             <div className="flex flex-col space-y-4 w-full font-semibold ">
               <Link
+              onClick={toggleSidebar}
                 href="/dashboard"
                 className={`hover:bg-muted-foreground hover:text-background p-2 rounded-md ${activeLink(
                   "/dashboard"
@@ -62,6 +63,7 @@ export const DashboardNav = () => {
                 <p>Dashboard</p>
               </Link>
               <Link
+                onClick={toggleSidebar}
                 href="/clothes"
                 className={`hover:bg-muted-foreground hover:text-background p-2 rounded-md flex items-center gap-2 ${activeLink(
                   "/clothes"
@@ -71,6 +73,7 @@ export const DashboardNav = () => {
                 <p> My Clothes</p>
               </Link>
               <Link
+                onClick={toggleSidebar}
                 href="/favorites"
                 className={`hover:bg-muted-foreground hover:text-background p-2 rounded-md flex items-center gap-2 ${activeLink(
                   "/favorites"
@@ -80,6 +83,7 @@ export const DashboardNav = () => {
                 <p>My Favorites</p>
               </Link>
               <Link
+                onClick={toggleSidebar}
                 href="/outfit"
                 className={`hover:bg-muted-foreground hover:text-background p-2 rounded-md flex items-center gap-2 ${activeLink(
                   "/outfit"
@@ -106,6 +110,7 @@ export const DashboardNav = () => {
         </div>
       </aside>
       <div
+        onClick={toggleSidebar}
         className={`md:hidden ${
           shown ? "block" : "hidden"
         } w-full h-screen fixed backdrop-blur-sm z-0`}
