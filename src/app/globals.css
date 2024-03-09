@@ -99,3 +99,19 @@ Light
   .text1{
     font-family:var(--josefsans)
   }
+
+.sidebar {
+  min-width: 224px;
+  width: 300px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 20;
+  transition: transform 0.5s ease;
+  transform: translateX(-100%);
+}
+
+.sidebar.shown {
+  transform: translateX(0);
+}

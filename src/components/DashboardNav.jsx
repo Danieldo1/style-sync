@@ -27,22 +27,25 @@ export const DashboardNav = () => {
   };
   return (
     <>
-      <button onClick={toggleSidebar}>
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden fixed top-0 z-10  p-5 bg-card"
+      >
         <HiMenuAlt1
-          className={`w-6 h-6 absolute top-2 z-10 left-2 ${
-            shown ? "hidden" : "block md:hidden"
+          className={`w-6 h-6 absolute top-2 z-10 left-2  ${
+            shown ? "hidden" : "block "
           }`}
         />
       </button>
       <aside
-        className={`min-w-56 w-72 z-10 fixed md:static flex-grow h-screen bg-primary-foreground pt-5 border-r border-secondary   ${
-          shown ? "block " : "hidden"
+        className={`md:static flex-grow h-screen bg-primary-foreground pt-5 border-r border-secondary sidebar ${
+          shown ? "shown" : ""
         }`}
       >
         <div className="flex flex-col h-full mx-2 relative ">
           <button onClick={toggleSidebar}>
             <IoMdClose
-              className={`w-6 h-6 absolute top-2 right-2 ${
+              className={`w-6 h-6 absolute -top-2 right-2 ${
                 shown ? "block md:hidden" : "hidden"
               }`}
             />
@@ -54,7 +57,7 @@ export const DashboardNav = () => {
           <div className="flex flex-col h-full justify-between">
             <div className="flex flex-col space-y-4 w-full font-semibold ">
               <Link
-              onClick={toggleSidebar}
+                onClick={toggleSidebar}
                 href="/dashboard"
                 className={`hover:bg-muted-foreground hover:text-background p-2 rounded-md ${activeLink(
                   "/dashboard"

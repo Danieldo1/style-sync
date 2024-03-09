@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            <main className="flex h-screen">
+            <main className="flex h-screen overflow-hidden">
               <DashboardNav />
               <div className="w-full mx-10 my-7 ">{children}</div>
             </main>
