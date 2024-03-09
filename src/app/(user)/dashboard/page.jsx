@@ -12,7 +12,7 @@ const DashboardPage = () => {
     // rendering components for logged in users
     return (
       <div className="w-full h-screen flex flex-col ">
-        <p className="text-2xl mb-2">
+        <p className="text-4xl mb-2">
           Welcome <span className="font-bold">{session.user?.name}</span>
         </p>
 

@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
           >
             <main className="flex h-screen">
               <DashboardNav />
-              <div className="w-full mx-2 my-5">{children}</div>
+              <div className="w-full mx-10 my-7 ">{children}</div>
             </main>
           </ThemeProvider>
         </body>

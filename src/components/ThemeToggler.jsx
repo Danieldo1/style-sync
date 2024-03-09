@@ -9,7 +9,8 @@ const DarkModeSwitchCustom = () => {
       onChange={() => setTheme(theme === "light" ? "dark" : "light")}
       checked={theme === "dark"}
       size={24}
-   
+      sunColor="#040404"
+      moonColor="#EFECEC"
     />
   );
 };
