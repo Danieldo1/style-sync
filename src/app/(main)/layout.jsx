@@ -1,7 +1,7 @@
 import { Josefin_Sans, Prompt } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import SessionWrapper from "../components/SessionWrapper";
+import SessionWrapper from "../../components/SessionWrapper";
 
 import Nav from "@/components/Nav";
 

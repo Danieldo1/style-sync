@@ -13,9 +13,14 @@ const handler = NextAuth({
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
-  pages: {
-    signIn: "/login",
-    signOut: "/",
+  callbacks: {
+  async redirect({ url, baseUrl }) {
+    // Allows relative callback URLs
+   
+    if (url.startsWith("/")) return `${baseUrl}${url}`
+    else if (new URL(url).origin === baseUrl) return url
+    return baseUrl
+  }
   },
 });
 

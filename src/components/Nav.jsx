@@ -5,14 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import DarkModeSwitchCustom from "./ThemeToggler";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
   const { data: session } = useSession();
-
+const router = useRouter()
   return (
     <header className="sticky top-0 z-10 bg-muted-foreground/30 py-4 backdrop-filter backdrop-blur-lg border-b border-gray-100">
       <div className="flex items-center container mx-auto justify-between    ">
-        <Link href={"/"} className="text-xl font-bold text1">StyleSync</Link>
+        <Link href={"/"} className="text-xl font-bold text1">
+          StyleSync
+        </Link>
         <nav>
           <ul className="flex items-center space-x-4 ">
             <DarkModeSwitchCustom />
@@ -34,7 +37,13 @@ const Nav = () => {
             ) : (
               <>
                 <li>
-                  <Button onClick={() => signIn("google")}>Sign in</Button>
+                  <Button
+                    onClick={() =>
+                      {signIn("google", { callbackUrl: "/dashboard" })}
+                    }
+                  >
+                    Sign in
+                  </Button>
                 </li>
               </>
             )}

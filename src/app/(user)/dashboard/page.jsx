@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 const DashboardPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
+ 
   if (session) {
     // rendering components for logged in users
     return (
@@ -25,9 +26,7 @@ const DashboardPage = () => {
         </Button>
       </div>
     );
-  } else {
-    router.push("/");
-  }
+  } 
 };
 
 export default DashboardPage;
