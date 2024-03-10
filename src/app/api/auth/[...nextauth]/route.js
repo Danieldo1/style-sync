@@ -1,7 +1,11 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "@/lib/mongoClient";
+
 
 const handler = NextAuth({
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -16,7 +20,6 @@ const handler = NextAuth({
   callbacks: {
   async redirect({ url, baseUrl }) {
     // Allows relative callback URLs
-   
     if (url.startsWith("/")) return `${baseUrl}${url}`
     else if (new URL(url).origin === baseUrl) return url
     return baseUrl
