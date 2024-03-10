@@ -18,7 +18,7 @@ export const DashboardNav = () => {
   const [shown, setShown] = useState(true);
   const pathname = usePathname();
   const activeLink = (path) => {
-    if (path === pathname) {
+    if (path === pathname || pathname.includes(path)) {
       return "bg-muted-foreground text-background";
     }
   };

@@ -111,6 +111,19 @@ Light
   transition: transform 0.5s ease;
   transform: translateX(-100%);
 }
+@media (max-width: 767px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.shown {
+    transform: translateX(0);
+  }
+}
+@media (min-width: 768px) {
+  .sidebar {
+    transform: none !important; /* Override any transform */
+  }
+}
 
 .sidebar.shown {
   transform: translateX(0);
