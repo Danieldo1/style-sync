@@ -1,30 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
 @layer base {
   :root {
-    --background: 0 0% 100%;   
-    --foreground: 222.2 84% 4.9%;  
-    --card: 0 0% 100%;  
-    --card-foreground: 222.2 84% 4.9%;  
-    --popover: 0 0% 100%;  
-    --popover-foreground: 222.2 84% 4.9%;  
-    --primary: 222.2 47.4% 11.2%;  
-    --primary-foreground: 210 40% 98%;  
-    --secondary: 210 40% 96.1%;  
-    --secondary-foreground: 222.2 47.4% 11.2%;  
-    --muted: 210 40% 96.1%;  
-    --muted-foreground: 215.4 16.3% 46.9%;  
-    --accent: 210 40% 96.1%;  
-    --accent-foreground: 222.2 47.4% 11.2%;  
-    --destructive: 0 84.2% 60.2%;  
-    --destructive-foreground: 210 40% 98%;  
-    --border: 214.3 31.8% 91.4%;  
-    --input: 214.3 31.8% 91.4%;  
-    --ring: 222.2 84% 4.9%;  
-    --radius: 0.3rem;  
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.3rem;
   }
 
   .dark {
@@ -96,9 +95,9 @@ Light
   
   */
 
-  .text1{
-    font-family:var(--josefsans)
-  }
+.text1 {
+  font-family: var(--josefsans);
+}
 
 .sidebar {
   min-width: 224px;
@@ -127,4 +126,107 @@ Light
 
 .sidebar.shown {
   transform: translateX(0);
+}
+
+.loader {
+  width: 70px;
+  height: 35px;
+  position: relative;
+  overflow: hidden;
+}
+.loader:before {
+  content: "";
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 5px solid #0000;
+  border-color: #fff #fff #0000 #0000;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: rotate 3s ease-in-out infinite;
+  transform: rotate(-200deg);
+}
+@keyframes rotate {
+  0% {
+    border-width: 10px;
+  }
+  25% {
+    border-width: 3px;
+  }
+  50% {
+    transform: rotate(115deg);
+    border-width: 10px;
+  }
+  75% {
+    border-width: 3px;
+  }
+  100% {
+    border-width: 10px;
+  }
+}
+
+.react-select__option {
+  font-family: var(--josefsans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+ 
+}
+
+.switch {
+ --button-width: 3.5em;
+ --button-height: 2em;
+ --toggle-diameter: 1.5em;
+ --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter)) / 2);
+ --toggle-shadow-offset: 10px;
+ --toggle-wider: 3em;
+ --color-grey: #cccccc;
+ --color-green: #4296f4;
+}
+
+.slider {
+ display: inline-block;
+ width: var(--button-width);
+ height: var(--button-height);
+ background-color: var(--color-grey);
+ border-radius: calc(var(--button-height) / 2);
+ position: relative;
+ transition: 0.3s all ease-in-out;
+}
+
+.slider::after {
+ content: "";
+ display: inline-block;
+ width: var(--toggle-diameter);
+ height: var(--toggle-diameter);
+ background-color: #fff;
+ border-radius: calc(var(--toggle-diameter) / 2);
+ position: absolute;
+ top: var(--button-toggle-offset);
+ transform: translateX(var(--button-toggle-offset));
+ box-shadow: var(--toggle-shadow-offset) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+ transition: 0.3s all ease-in-out;
+}
+
+.switch input[type="checkbox"]:checked + .slider {
+ background-color: var(--color-green);
+}
+
+.switch input[type="checkbox"]:checked + .slider::after {
+ transform: translateX(calc(var(--button-width) - var(--toggle-diameter) - var(--button-toggle-offset)));
+ box-shadow: calc(var(--toggle-shadow-offset) * -1) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+}
+
+.switch input[type="checkbox"] {
+ display: none;
+}
+
+.switch input[type="checkbox"]:active + .slider::after {
+ width: var(--toggle-wider);
+}
+
+.switch input[type="checkbox"]:checked:active + .slider::after {
+ transform: translateX(calc(var(--button-width) - var(--toggle-wider) - var(--button-toggle-offset)));
 }

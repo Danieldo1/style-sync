@@ -116,7 +116,7 @@ export const DashboardNav = () => {
         onClick={toggleSidebar}
         className={`md:hidden ${
           shown ? "block" : "hidden"
-        } w-full h-screen fixed backdrop-blur-sm z-0`}
+        } w-full h-screen fixed backdrop-blur-sm z-10`}
       />
     </>
   );
