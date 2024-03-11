@@ -28,6 +28,7 @@
     "react-select": "^5.8.0",
     "react-select-search": "^4.1.7",
     "react-toggle-dark-mode": "^1.1.1",
+    "replicate": "^0.27.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7"
   },

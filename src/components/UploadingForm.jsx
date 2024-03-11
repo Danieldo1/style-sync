@@ -2,35 +2,55 @@
 import React, { useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import Image from "next/image";
-import { removeBackground } from "../lib/fileUpload";
+
 import CreatableSelect from "react-select/creatable";
 import { colors, createOption } from "@/lib";
+// import { makePredictionWithFile } from "@/lib/handleUploadFile.action";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imgUpload, setImgUpload] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState(colors);
-  const [pattern, setPattern] = useState('');
+  const [pattern, setPattern] = useState("");
   const [value, setValue] = useState();
 
   const [isToggled, setIsToggled] = useState(false);
-
   const toggleSwitch = () => setIsToggled(!isToggled);
 
-  const grabImage = () => {
-    const imageInput = document.querySelector('input[type="file"]');
-    imageInput.click();
-
-    imageInput.onchange = async () => {
-      setLoading(true);
+  const grabImage = async (event) => {
+      const imageInput = document.querySelector('input[type="file"]');
+      setImgUpload(true);
       const file = imageInput.files[0];
-      if (!file) return;
-      const imageBlob = await removeBackground(file);
-      setImage(URL.createObjectURL(imageBlob));
-      setLoading(false);
-    };
+      const formData = new FormData();
+    formData.append("image", file);
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const data = await response.json();
+    const UploadedImg = data.data.url;
+    setUploadedImage(UploadedImg);
+    setImgUpload(false);
+    setLoading(true);
+    const res = await fetch("/api/removeBg", {
+      method: "POST",
+      body: JSON.stringify({
+        file: UploadedImg,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await res.json();
+    setImage(result);
+    setLoading(false);
   };
 
   const handleCreate = (inputValue) => {
@@ -46,34 +66,68 @@ const UploadingForm = () => {
   return (
     <>
       <div className="w-full h-[25%] flex-col md:justify-between md:flex-row flex gap-5">
-        {loading === true ? (
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="w-full h-full bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background  border-dashed border-2 rounded-md flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 ease-in outline-none">
-              <span className="loader"></span>
-              Loading...
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-full flex justify-center items-center">
-            <button
-              onClick={() => grabImage()}
-              className="w-full h-full bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background  border-dashed border-2 rounded-md flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 ease-in outline-none"
+        {!imgUpload && uploadedImage.length === 0 && (
+          <div className="w-full h-full flex justify-center items-center ">
+            <label
+              htmlFor="fileInput"
+              className="w-full cursor-pointer h-full bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background border-dashed border-2 rounded-md flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 ease-in outline-none"
             >
-              <input type="file" className="hidden" />
+              <input
+                id="fileInput"
+                type="file"
+                className="hidden"
+                onChange={grabImage}
+              />
               <FiUpload className="w-12 h-12" />
               <p className="text-2xl font-bold tracking-wider capitalize">
                 Upload image
               </p>
-            </button>
+            </label>
           </div>
         )}
-        {image && image.length > 0 && (
-          <div className="w-full h-full flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
-            <div className="w-full h-full relative rounded-md">
-              <Image src={image} alt="clothes" fill className="object-cover" />
+
+        {imgUpload && (
+          <div className="w-full h-full flex justify-center items-center">
+            <div className="w-full h-full bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background border-dashed border-2 rounded-md flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 ease-in outline-none">
+              <span className="loader"></span>
+              Loading...
             </div>
           </div>
         )}
+
+        {!imgUpload && uploadedImage.length > 0 && (
+          <div className="w-full h-full flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
+            <div className="w-full h-full relative rounded-md">
+              <Image
+                src={uploadedImage}
+                alt="clothes"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        )}
+        {uploadedImage.length > 0 ? (
+          loading === true ? (
+            <div className="w-full h-full flex justify-center items-center">
+              <div className="w-full h-full bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background  border-dashed border-2 rounded-md flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 ease-in outline-none">
+                <span className="loader"></span>
+                Loading...
+              </div>
+            </div>
+          ) : (
+            <div className="w-full h-full flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
+              <div className="w-full h-full relative rounded-md">
+                <Image
+                  src={image}
+                  alt="clothes"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          )
+        ) : null}
       </div>
       <div className="mt-5">
         <form className="w-full ">
@@ -108,26 +162,25 @@ const UploadingForm = () => {
           </div>
           <div>
             <div className="mt-5 flex flex-col">
-
-            <label className="mb-2">Patterns or Design</label>
-            <label className="switch">
-              <input
-                type="checkbox"
-                checked={isToggled}
-                onChange={toggleSwitch}
-              />
-              <span className="slider"></span>
-            </label>
+              <label className="mb-2">Patterns or Design</label>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={isToggled}
+                  onChange={toggleSwitch}
+                />
+                <span className="slider"></span>
+              </label>
             </div>
             {isToggled && (
               <div className="mt-5">
                 <label>Describe it</label>
                 <input
-                placeholder="Stripped lines on the bottom"
+                  placeholder="Stripped lines on the bottom"
                   type="text"
                   autoComplete={"off"}
                   className="w-full rounded-md p-2 bg-background border  border-popover-foreground"
-                onChange={(e) => setPattern(e.target.value)}
+                  onChange={(e) => setPattern(e.target.value)}
                 />
               </div>
             )}
