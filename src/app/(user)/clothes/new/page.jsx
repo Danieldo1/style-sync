@@ -11,7 +11,7 @@ const AddNewClothesPage = () => {
 
 
   return (
-    <section className="w-full h-screen">
+    <section className="w-full h-full">
       <Heading title="Clothes" subTitle="Add new clothes" />
      <UploadingForm />
     </section>

@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import Image from "next/image";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 import CreatableSelect from "react-select/creatable";
 import { colors, createOption } from "@/lib";
-// import { makePredictionWithFile } from "@/lib/handleUploadFile.action";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -15,6 +15,7 @@ const UploadingForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState(colors);
+  const [photoUrl, setPhotoUrl] = useState("");
   const [pattern, setPattern] = useState("");
   const [value, setValue] = useState();
 
@@ -51,6 +52,50 @@ const UploadingForm = () => {
     const result = await res.json();
     setImage(result);
     setLoading(false);
+       const imageResponse = await fetch(result);
+       
+       const imageBlob = await imageResponse.blob();
+       
+     const s3Upload = await uploadAWS(imageBlob);
+      console.log(s3Upload, "s3Upload");
+     if(s3Upload.ok){
+      const s3ImageUrl = await s3Upload.json();
+       console.log(s3ImageUrl, "s3ImageUrl");
+      setPhotoUrl(s3ImageUrl);
+     } else {
+      console.log('error uploading image');
+     }
+  };
+  const uploadAWS = async (file) => {
+    const myAWSAccessKey = process.env.NEXT_PUBLIC_MY_AWS_ACCESS_KEY;
+    const myAWSSecretKey = process.env.NEXT_PUBLIC_MY_AWS_SECRET_KEY;
+    const myAWSBucket = process.env.NEXT_PUBLIC_MY_AWS_BUCKET;
+    const s3Client = new S3Client({
+      region: "eu-north-1",
+      credentials: {
+        accessKeyId: myAWSAccessKey,
+        secretAccessKey: myAWSSecretKey,
+      },
+    });
+
+    
+    const ext = file.type.split("/")[1];
+
+    const newFIle = new Date().getTime() + "." + ext;
+
+    const body = new Blob([file], { type: file.type });
+
+    s3Client.send(
+      new PutObjectCommand({
+        Bucket: myAWSBucket,
+        Key: newFIle,
+        Body: body,
+        ContentType: file.type,
+        ACL: "public-read",
+      })
+    );
+
+    return Response.json(`https://${myAWSBucket}.s3.amazonaws.com/${newFIle}`);
   };
 
   const handleCreate = (inputValue) => {
@@ -64,8 +109,8 @@ const UploadingForm = () => {
   };
 
   return (
-    <>
-      <div className="w-full h-[25%] flex-col md:justify-between md:flex-row flex gap-5">
+    <div className="w-full h-full flex flex-col overflow-y-auto scrollbar-hide">
+      <div className="max-w-md mx-auto md:max-w-xl lg:max-w-3xl xl:max-w-5xl  h-full  w-full  flex-col md:justify-between md:flex-row flex gap-5">
         {!imgUpload && uploadedImage.length === 0 && (
           <div className="w-full h-full flex justify-center items-center ">
             <label
@@ -75,6 +120,7 @@ const UploadingForm = () => {
               <input
                 id="fileInput"
                 type="file"
+                accept="image/*"
                 className="hidden"
                 onChange={grabImage}
               />
@@ -96,17 +142,18 @@ const UploadingForm = () => {
         )}
 
         {!imgUpload && uploadedImage.length > 0 && (
-          <div className="w-full h-full flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
-            <div className="w-full h-full relative rounded-md">
+          <div className=" w-full h-full  flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
+            <div className="aspect-square  w-full h-full  relative rounded-md">
               <Image
                 src={uploadedImage}
                 alt="clothes"
                 fill
-                className="object-cover"
+                className="object-cover rounded-sm"
               />
             </div>
           </div>
         )}
+
         {uploadedImage.length > 0 ? (
           loading === true ? (
             <div className="w-full h-full flex justify-center items-center">
@@ -117,7 +164,7 @@ const UploadingForm = () => {
             </div>
           ) : (
             <div className="w-full h-full flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
-              <div className="w-full h-full relative rounded-md">
+              <div className="aspect-square w-full h-full relative rounded-md">
                 <Image
                   src={image}
                   alt="clothes"
@@ -129,7 +176,9 @@ const UploadingForm = () => {
           )
         ) : null}
       </div>
-      <div className="mt-5">
+     
+      
+      <div className="mt-5 py-10">
         <form className="w-full ">
           <div className="flex flex-col md:flex-row md:justify-between w-full gap-5">
             <div className="w-full">
@@ -160,8 +209,8 @@ const UploadingForm = () => {
               />
             </div>
           </div>
-          <div>
-            <div className="mt-5 flex flex-col">
+          <div className="w-full py-10">
+            <div className="mt-5 flex flex-col ">
               <label className="mb-2">Patterns or Design</label>
               <label className="switch">
                 <input
@@ -173,7 +222,7 @@ const UploadingForm = () => {
               </label>
             </div>
             {isToggled && (
-              <div className="mt-5">
+              <div className="mt-5 flex flex-col">
                 <label>Describe it</label>
                 <input
                   placeholder="Stripped lines on the bottom"
@@ -187,7 +236,7 @@ const UploadingForm = () => {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

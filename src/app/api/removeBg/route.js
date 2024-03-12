@@ -15,6 +15,6 @@ export const POST = async (req) => {
       },
     }
   );
-  console.log(output, "output");
+
   return NextResponse.json(output);
 }
