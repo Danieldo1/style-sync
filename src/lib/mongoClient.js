@@ -6,7 +6,8 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-const options = {};
+const options = {
+};
 
 let client;
 let clientPromise;

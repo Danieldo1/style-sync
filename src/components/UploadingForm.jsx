@@ -12,7 +12,8 @@ import {
   groupedOptions,
   formatGroupLabel,
 } from "@/lib";
-
+import { Button } from "./ui/button";
+import { useSession } from "next-auth/react";
 const UploadingForm = () => {
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,6 +30,9 @@ const UploadingForm = () => {
   const [isToggled, setIsToggled] = useState(false);
   const toggleSwitch = () => setIsToggled(!isToggled);
 
+  const {data:session}=useSession()
+  const email = session && session.user.email;
+ 
   const grabImage = async (event) => {
     const imageInput = document.querySelector('input[type="file"]');
     setImgUpload(true);
@@ -64,7 +68,7 @@ const UploadingForm = () => {
     const imageBlob = await imageResponse.blob();
 
     const s3Upload = await uploadAWS(imageBlob);
-    console.log(s3Upload, "s3Upload");
+    
     if (s3Upload.ok) {
       const s3ImageUrl = await s3Upload.json();
       console.log(s3ImageUrl, "s3ImageUrl");
@@ -104,19 +108,65 @@ const UploadingForm = () => {
     return Response.json(`https://${myAWSBucket}.s3.amazonaws.com/${newFIle}`);
   };
 
-  const handleCreate = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newOption = createOption(inputValue);
-      setIsLoading(false);
-      setOptions((prev) => [...prev, newOption]);
-      setValue(newOption);
-    }, 1000);
+const handleCreate = (inputValue) => {
+  setIsLoading(true);
+  setTimeout(() => {
+    const newOption = createOption(inputValue);
+    setIsLoading(false);
+    setOptions((prevOptions) => [...prevOptions, newOption]);
+    // Check if value is already an array and add the new option to it
+    setValue((prevValue) => {
+      // If prevValue is not an array, make it an array with the single value
+      const valueArray = Array.isArray(prevValue)
+        ? prevValue
+        : prevValue
+        ? [prevValue]
+        : [];
+      return [...valueArray, newOption];
+    });
+  }, 1000);
+};
+
+const handleSelectChange = (newValue) => {
+  setCategory(newValue);
+}
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  
+  const formData = {
+    category: category.value,
+    colors: Array.isArray(value) ? value.map((opt) => opt.value) : [],
+    pattern: isToggled ? pattern : "",
+    photoUrl: photoUrl,
+    email:email
   };
+
+  console.log(formData, "formData");
+
+  try {
+    const response = await fetch("/api/items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      // Handle success
+      console.log("Item saved successfully");
+    } else {
+      // Handle error
+      console.error("Failed to save the item");
+    }
+  } catch (error) {
+    console.error("Error submitting the form", error);
+  }
+};
 
   return (
     <div className="w-full h-full flex flex-col overflow-y-auto scrollbar-hide">
-      <div className="max-w-md mx-auto md:max-w-xl lg:max-w-3xl xl:max-w-5xl  h-full  w-full  flex-col md:justify-between md:flex-row flex gap-5">
+      <div className="max-w-md mx-auto  lg:max-w-3xl xl:max-w-5xl h-full  w-full  flex-col lg:justify-between lg:flex-row flex gap-5">
         {!imgUpload && uploadedImage.length === 0 && (
           <div className="w-full h-full flex justify-center items-center ">
             <label
@@ -126,7 +176,7 @@ const UploadingForm = () => {
               <input
                 id="fileInput"
                 type="file"
-                accept="image/*"
+                accept="image/heic,image/heic-sequence,image/*"
                 className="hidden"
                 onChange={grabImage}
               />
@@ -184,17 +234,16 @@ const UploadingForm = () => {
       </div>
 
       <div className="mt-5 py-10">
-        <form className="w-full ">
+        <form className="w-full pb-3" onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row md:justify-between w-full gap-5">
             <div className="w-full">
               <label>Category</label>
               <Select
-                defaultValue={groupedOptions[0].options[0]} // Set default value according to your preference
-                options={groupedOptions} // Replace colourOptions with groupedOptions
+                options={groupedOptions}
                 formatGroupLabel={formatGroupLabel}
+                onChange={handleSelectChange}
                 theme={(theme) => ({
                   ...theme,
-
                   colors: {
                     ...theme.colors,
                     primary25: "#f0f0f0",
@@ -211,7 +260,17 @@ const UploadingForm = () => {
                 isClearable
                 isDisabled={isLoading}
                 isLoading={isLoading}
-                onChange={(newValue) => setValue(newValue)}
+                onChange={(newValue, actionMeta) => {
+                  // If the action is a deselection and it's multi-select, ensure an array is always set
+                  if (
+                    actionMeta.action === "remove-value" ||
+                    actionMeta.action === "clear"
+                  ) {
+                    setValue(newValue || []);
+                  } else {
+                    setValue(newValue);
+                  }
+                }}
                 onCreateOption={handleCreate}
                 options={options}
                 value={value}
@@ -255,6 +314,9 @@ const UploadingForm = () => {
               </div>
             )}
           </div>
+          <Button type="submit" className="w-full">
+            Add Item
+          </Button>
         </form>
       </div>
     </div>
