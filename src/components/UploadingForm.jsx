@@ -5,7 +5,13 @@ import Image from "next/image";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 import CreatableSelect from "react-select/creatable";
-import { colors, createOption } from "@/lib";
+import Select from "react-select";
+import {
+  colors,
+  createOption,
+  groupedOptions,
+  formatGroupLabel,
+} from "@/lib";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -15,6 +21,7 @@ const UploadingForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState(colors);
+  const [category, setCategory] = useState({});
   const [photoUrl, setPhotoUrl] = useState("");
   const [pattern, setPattern] = useState("");
   const [value, setValue] = useState();
@@ -23,10 +30,10 @@ const UploadingForm = () => {
   const toggleSwitch = () => setIsToggled(!isToggled);
 
   const grabImage = async (event) => {
-      const imageInput = document.querySelector('input[type="file"]');
-      setImgUpload(true);
-      const file = imageInput.files[0];
-      const formData = new FormData();
+    const imageInput = document.querySelector('input[type="file"]');
+    setImgUpload(true);
+    const file = imageInput.files[0];
+    const formData = new FormData();
     formData.append("image", file);
     const response = await fetch(
       `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
@@ -52,19 +59,19 @@ const UploadingForm = () => {
     const result = await res.json();
     setImage(result);
     setLoading(false);
-       const imageResponse = await fetch(result);
-       
-       const imageBlob = await imageResponse.blob();
-       
-     const s3Upload = await uploadAWS(imageBlob);
-      console.log(s3Upload, "s3Upload");
-     if(s3Upload.ok){
+    const imageResponse = await fetch(result);
+
+    const imageBlob = await imageResponse.blob();
+
+    const s3Upload = await uploadAWS(imageBlob);
+    console.log(s3Upload, "s3Upload");
+    if (s3Upload.ok) {
       const s3ImageUrl = await s3Upload.json();
-       console.log(s3ImageUrl, "s3ImageUrl");
+      console.log(s3ImageUrl, "s3ImageUrl");
       setPhotoUrl(s3ImageUrl);
-     } else {
-      console.log('error uploading image');
-     }
+    } else {
+      console.log("error uploading image");
+    }
   };
   const uploadAWS = async (file) => {
     const myAWSAccessKey = process.env.NEXT_PUBLIC_MY_AWS_ACCESS_KEY;
@@ -78,7 +85,6 @@ const UploadingForm = () => {
       },
     });
 
-    
     const ext = file.type.split("/")[1];
 
     const newFIle = new Date().getTime() + "." + ext;
@@ -176,13 +182,28 @@ const UploadingForm = () => {
           )
         ) : null}
       </div>
-     
-      
+
       <div className="mt-5 py-10">
         <form className="w-full ">
           <div className="flex flex-col md:flex-row md:justify-between w-full gap-5">
             <div className="w-full">
               <label>Category</label>
+              <Select
+                defaultValue={groupedOptions[0].options[0]} // Set default value according to your preference
+                options={groupedOptions} // Replace colourOptions with groupedOptions
+                formatGroupLabel={formatGroupLabel}
+                theme={(theme) => ({
+                  ...theme,
+
+                  colors: {
+                    ...theme.colors,
+                    primary25: "#f0f0f0",
+                    neutral5: "#fff",
+                    neutral90: "#f0f0f0",
+                  },
+                })}
+                className="text-gray-900"
+              />
             </div>
             <div className="w-full">
               <label>Color</label>

@@ -1,18 +1,152 @@
-export const options = [
-  {
-    name: "Tops",
-    value: "top",
-  },
-  {
-    name: "Bottoms",
-    value: "bottom",
-  },
-];
 
 export const createOption = (label) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, ""),
 });
+export const groupStyles = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+};
+export const groupBadgeStyles = {
+  backgroundColor: "#EBECF0",
+  borderRadius: "2em",
+  color: "#172B4D",
+  display: "inline-block",
+  fontSize: 12,
+  fontWeight: "normal",
+  lineHeight: "1",
+  minWidth: 1,
+  padding: "0.16666666666667em 0.5em",
+  textAlign: "center",
+};
+
+export const formatGroupLabel = (data) => (
+  <div style={groupStyles}>
+    <span>{data.label}</span>
+    <span style={groupBadgeStyles}>{data.options.length}</span>
+  </div>
+);
+
+
+const topsOptions = [
+  createOption("T-shirt"),
+  createOption("Long sleeved"),
+  createOption("Blouse"),
+  createOption("Collared shirt"),
+  createOption("Button up"),
+  createOption("Cardigan"),
+  createOption("Knit sweater"),
+  createOption("Tank top"),
+  createOption("Hoodie"),
+  createOption("Polo shirt"),
+  createOption("Crop top"),
+  createOption("Tunic"),
+  createOption("Wrap top"),
+  createOption("Peplum top"),
+  createOption("Off-shoulder top"),
+  createOption("Bodysuit"),
+  createOption("Sleeveless blouse"),
+];
+
+const bottomsOptions = [
+  createOption("Jeans"),
+  createOption("Slacks"),
+  createOption("Shorts"),
+  createOption("Skirt, long"),
+  createOption("Skirt, short"),
+  createOption("Leggings"),
+  createOption("Sweatpants"),
+  createOption("Cargo pants"),
+  createOption("Culottes"),
+  createOption("Palazzo pants"),
+  createOption("Pencil skirt"),
+  createOption("A-line skirt"),
+  createOption("Denim skirt"),
+  createOption("High-waisted shorts"),
+  createOption("Flared pants"),
+  createOption("Jeggings"),
+  createOption("Paperbag waist pants"),
+];
+
+const shoesOptions = [
+  createOption("Sneakers"),
+  createOption("Sandals"),
+  createOption("Boots"),
+  createOption("Flats"),
+  createOption("Heels"),
+  createOption("Loafers"),
+  createOption("Oxfords"),
+  createOption("Espadrilles"),
+  createOption("Mules"),
+  createOption("Platform shoes"),
+  createOption("Wedges"),
+];
+
+const outerwearOptions = [
+  createOption("Puffer jacket"),
+  createOption("Vest"),
+  createOption("Trenchcoat"),
+  createOption("Jean Jacket"),
+  createOption("Leather jacket"),
+  createOption("Raincoat"),
+  createOption("Peacoat"),
+  createOption("Fitted jacket"),
+  createOption("Parka"),
+  createOption("Windbreaker"),
+  createOption("Bomber jacket"),
+  createOption("Quilted jacket"),
+  createOption("Fur coat"),
+  createOption("Cape"),
+  createOption("Shawl"),
+  createOption("Kimono"),
+  createOption("Poncho"),
+];
+
+const accessoriesOptions = [
+  createOption("Baseball cap"),
+  createOption("Beanie"),
+  createOption("Hat, other"),
+  createOption("Scarf, knit"),
+  createOption("Scarf, silk"),
+  createOption("Tote bag"),
+  createOption("Handbag"),
+  createOption("Backpack"),
+  createOption("Crossbody bag"),
+  createOption("Sunglasses"),
+  createOption("Bracelet"),
+  createOption("Earrings"),
+  createOption("Necklace"),
+  createOption("Ring"),
+  createOption("Watch"),
+  createOption("Belt"),
+  createOption("Gloves"),
+  createOption("Headband"),
+  createOption("Choker"),
+];
+
+export const groupedOptions = [
+  {
+    label: "TOPS",
+    options: topsOptions,
+  },
+  {
+    label: "BOTTOMS",
+    options: bottomsOptions,
+  },
+  {
+    label: "SHOES",
+    options: shoesOptions,
+  },
+  {
+    label: "OUTERWEAR",
+    options: outerwearOptions,
+  },
+  {
+    label: "ACCESSORIES",
+    options: accessoriesOptions,
+  },
+];
 
 export const colors = [
   createOption("Alice Blue"),
