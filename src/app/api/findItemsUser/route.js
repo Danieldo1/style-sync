@@ -16,7 +16,7 @@ export const GET = async (req) => {
   }
 
   // Find items associated with the user's _id
-  const items = await Item.find({ ref: user._id });
+  const items = await Item.find({ ref: user._id }).sort({ createdAt: -1 });
 
   return NextResponse.json(items);
 };

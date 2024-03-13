@@ -6,6 +6,8 @@ const itemSchema = new Schema({
   pattern: String,
   photoUrl: { type: String, required: true },
   ref: { type: Schema.Types.ObjectId, ref: "User" },
+},{
+  timestamps: true,
 });
 
 const Item = models.Item || model("Item", itemSchema);

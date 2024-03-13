@@ -80,7 +80,7 @@ const ClothesPage = () => {
           <RecentAddedItem data={data} loading={loading} />
         </div>
       ) : (
-        <CategoryItems />
+        <CategoryItems data={data} />
       )}
     </section>
   );
