@@ -22,3 +22,15 @@ export const POST = async (req) => {
     return Response.json({ success: false, error });
   }
 };
+
+export const DELETE = async (req) => {
+ const id = req.url.split("=").pop();
+  await connectDB();
+  try {
+    await Item.deleteOne({ _id: id });
+    return Response.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    return Response.json({ success: false, error });
+  }
+}

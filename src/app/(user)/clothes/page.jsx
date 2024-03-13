@@ -39,6 +39,9 @@ const ClothesPage = () => {
       setLoading(false);
     }
   };
+const handleDeleteItem = (deletedItemId) => {
+  setData((prevData) => prevData.filter((item) => item._id !== deletedItemId));
+};
 
   return (
     <section className="overflow-y-scroll scrollbar-hide">
@@ -77,7 +80,11 @@ const ClothesPage = () => {
       </div>
       {showRecentlyAdded ? (
         <div className="w-full h-full pb-5">
-          <RecentAddedItem data={data} loading={loading} />
+          <RecentAddedItem
+            data={data}
+            loading={loading}
+            onDelete={handleDeleteItem}
+          />
         </div>
       ) : (
         <CategoryItems data={data} />
