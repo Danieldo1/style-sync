@@ -12,6 +12,7 @@
     "@auth/mongodb-adapter": "^2.5.0",
     "@aws-sdk/client-s3": "^3.529.1",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-toast": "^1.1.5",
     "@uiw/react-color-colorful": "^2.1.1",
     "aws-sdk": "^2.1575.0",
     "axios": "^1.6.7",

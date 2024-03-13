@@ -14,6 +14,8 @@ import {
 } from "@/lib";
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -32,6 +34,8 @@ const UploadingForm = () => {
   const toggleSwitch = () => setIsToggled(!isToggled);
 
   const {data:session}=useSession()
+  const router = useRouter();
+  const { toast } = useToast();
   const email = session && session.user.email;
  
   const grabImage = async (event) => {
@@ -154,11 +158,24 @@ const handleSubmit = async (event) => {
     });
 
     if (response.ok) {
-      // Handle success
+      toast({
+        title: "Item saved successfully",
+        description: "Your item has been saved successfully.",
+        variant: "success",
+        duration: 3000,
+        
+      })
       console.log("Item saved successfully");
+      router.back();
     } else {
-      // Handle error
+     toast({
+       title: "Failed to save the item",
+       description: "Please try again later.",
+       variant: "destructive",
+       duration: 3000,
+     });
       console.error("Failed to save the item");
+      router.refresh();
     }
   } catch (error) {
     console.error("Error submitting the form", error);
@@ -169,7 +186,7 @@ const handleSubmit = async (event) => {
     <div className="w-full h-full flex flex-col overflow-y-auto scrollbar-hide">
       <div className="max-w-md mx-auto  lg:max-w-3xl xl:max-w-5xl h-full  w-full  flex-col lg:justify-between lg:flex-row flex gap-5">
         {!imgUpload && uploadedImage.length === 0 && (
-          <div className="w-full h-full flex justify-center items-center ">
+          <div className="w-full h-[80%] flex justify-center items-center ">
             <label
               htmlFor="fileInput"
               className="w-full cursor-pointer h-full bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background border-dashed border-2 rounded-md flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 ease-in outline-none"
@@ -234,92 +251,94 @@ const handleSubmit = async (event) => {
         ) : null}
       </div>
 
-      <div className="mt-5 py-10">
-        <form className="w-full pb-3" onSubmit={handleSubmit}>
-          <div className="flex flex-col md:flex-row md:justify-between w-full gap-5">
-            <div className="w-full">
-              <label>Category</label>
-              <Select
-                options={groupedOptions}
-                formatGroupLabel={formatGroupLabel}
-                onChange={handleSelectChange}
-                theme={(theme) => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary25: "#f0f0f0",
-                    neutral5: "#fff",
-                    neutral90: "#f0f0f0",
-                  },
-                })}
-                className="text-gray-900"
-              />
-            </div>
-            <div className="w-full">
-              <label>Color</label>
-              <CreatableSelect
-                isClearable
-                isDisabled={isLoading}
-                isLoading={isLoading}
-                onChange={(newValue, actionMeta) => {
-                  // If the action is a deselection and it's multi-select, ensure an array is always set
-                  if (
-                    actionMeta.action === "remove-value" ||
-                    actionMeta.action === "clear"
-                  ) {
-                    setValue(newValue || []);
-                  } else {
-                    setValue(newValue);
-                  }
-                }}
-                onCreateOption={handleCreate}
-                options={options}
-                value={value}
-                isMulti
-                theme={(theme) => ({
-                  ...theme,
-
-                  colors: {
-                    ...theme.colors,
-                    primary25: "#f0f0f0",
-                    neutral5: "#fff",
-                    neutral90: "#f0f0f0",
-                  },
-                })}
-                className="text-gray-900"
-              />
-            </div>
-          </div>
-          <div className="w-full py-10">
-            <div className="mt-5 flex flex-col ">
-              <label className="mb-2">Patterns or Design</label>
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={isToggled}
-                  onChange={toggleSwitch}
-                />
-                <span className="slider"></span>
-              </label>
-            </div>
-            {isToggled && (
-              <div className="mt-5 flex flex-col">
-                <label>Describe it</label>
-                <input
-                  placeholder="Stripped lines on the bottom"
-                  type="text"
-                  autoComplete={"off"}
-                  className="w-full rounded-md p-2 bg-background border  border-popover-foreground"
-                  onChange={(e) => setPattern(e.target.value)}
+      {uploadedImage.length > 0 && (
+        <div className="mt-5 py-10">
+          <form className="w-full pb-3" onSubmit={handleSubmit}>
+            <div className="flex flex-col md:flex-row md:justify-between w-full gap-5">
+              <div className="w-full">
+                <label>Category</label>
+                <Select
+                  options={groupedOptions}
+                  formatGroupLabel={formatGroupLabel}
+                  onChange={handleSelectChange}
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary25: "#f0f0f0",
+                      neutral5: "#fff",
+                      neutral90: "#f0f0f0",
+                    },
+                  })}
+                  className="text-gray-900"
                 />
               </div>
-            )}
-          </div>
-          <Button type="submit" className="w-full">
-            Add Item
-          </Button>
-        </form>
-      </div>
+              <div className="w-full">
+                <label>Color</label>
+                <CreatableSelect
+                  isClearable
+                  isDisabled={isLoading}
+                  isLoading={isLoading}
+                  onChange={(newValue, actionMeta) => {
+                    // If the action is a deselection and it's multi-select, ensure an array is always set
+                    if (
+                      actionMeta.action === "remove-value" ||
+                      actionMeta.action === "clear"
+                    ) {
+                      setValue(newValue || []);
+                    } else {
+                      setValue(newValue);
+                    }
+                  }}
+                  onCreateOption={handleCreate}
+                  options={options}
+                  value={value}
+                  isMulti
+                  theme={(theme) => ({
+                    ...theme,
+
+                    colors: {
+                      ...theme.colors,
+                      primary25: "#f0f0f0",
+                      neutral5: "#fff",
+                      neutral90: "#f0f0f0",
+                    },
+                  })}
+                  className="text-gray-900"
+                />
+              </div>
+            </div>
+            <div className="w-full py-10">
+              <div className="mt-5 flex flex-col ">
+                <label className="mb-2">Patterns or Design</label>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={isToggled}
+                    onChange={toggleSwitch}
+                  />
+                  <span className="slider"></span>
+                </label>
+              </div>
+              {isToggled && (
+                <div className="mt-5 flex flex-col">
+                  <label>Describe it</label>
+                  <input
+                    placeholder="Stripped lines on the bottom"
+                    type="text"
+                    autoComplete={"off"}
+                    className="w-full rounded-md p-2 bg-background border  border-popover-foreground"
+                    onChange={(e) => setPattern(e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+            <Button type="submit" className="w-full">
+              Add Item
+            </Button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
