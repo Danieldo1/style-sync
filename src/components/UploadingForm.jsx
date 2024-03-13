@@ -6,16 +6,12 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
-import {
-  colors,
-  createOption,
-  groupedOptions,
-  formatGroupLabel,
-} from "@/lib";
+import { colors, createOption, groupedOptions, formatGroupLabel } from "@/lib";
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { useForm, Controller } from "react-hook-form";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -33,11 +29,22 @@ const UploadingForm = () => {
   const [isToggled, setIsToggled] = useState(false);
   const toggleSwitch = () => setIsToggled(!isToggled);
 
-  const {data:session}=useSession()
+  const { data: session } = useSession();
   const router = useRouter();
   const { toast } = useToast();
   const email = session && session.user.email;
- 
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      colors: [],
+      category: "",
+    },
+  });
+
   const grabImage = async (event) => {
     const imageInput = document.querySelector('input[type="file"]');
     setImgUpload(true);
@@ -73,7 +80,7 @@ const UploadingForm = () => {
     const imageBlob = await imageResponse.blob();
 
     const s3Upload = await uploadAWS(imageBlob);
-    
+
     if (s3Upload.ok) {
       const s3ImageUrl = await s3Upload.json();
       console.log(s3ImageUrl, "s3ImageUrl");
@@ -82,6 +89,7 @@ const UploadingForm = () => {
       console.log("error uploading image");
     }
   };
+
   const uploadAWS = async (file) => {
     const myAWSAccessKey = process.env.NEXT_PUBLIC_MY_AWS_ACCESS_KEY;
     const myAWSSecretKey = process.env.NEXT_PUBLIC_MY_AWS_SECRET_KEY;
@@ -113,74 +121,72 @@ const UploadingForm = () => {
     return Response.json(`https://${myAWSBucket}.s3.amazonaws.com/${newFIle}`);
   };
 
-const handleCreate = (inputValue) => {
-  setIsLoading(true);
-  setTimeout(() => {
-    const newOption = createOption(inputValue);
-    setIsLoading(false);
-    setOptions((prevOptions) => [...prevOptions, newOption]);
-    // Check if value is already an array and add the new option to it
-    setValue((prevValue) => {
-      // If prevValue is not an array, make it an array with the single value
-      const valueArray = Array.isArray(prevValue)
-        ? prevValue
-        : prevValue
-        ? [prevValue]
-        : [];
-      return [...valueArray, newOption];
-    });
-  }, 1000);
-};
-
-const handleSelectChange = (newValue) => {
-  setCategory(newValue);
-}
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  
-  const formData = {
-    category: category.value,
-    colors: Array.isArray(value) ? value.map((opt) => opt.value) : [],
-    pattern: isToggled ? pattern : "",
-    photoUrl: photoUrl,
-    email:email
+  const handleCreate = (inputValue) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const newOption = createOption(inputValue);
+      setIsLoading(false);
+      setOptions((prevOptions) => [...prevOptions, newOption]);
+      // Check if value is already an array and add the new option to it
+      setValue((prevValue) => {
+        // If prevValue is not an array, make it an array with the single value
+        const valueArray = Array.isArray(prevValue)
+          ? prevValue
+          : prevValue
+          ? [prevValue]
+          : [];
+        return [...valueArray, newOption];
+      });
+    }, 1000);
   };
 
-  console.log(formData, "formData");
+  const handleSelectChange = (newValue) => {
+    setCategory(newValue);
+  };
+  const onSubmit = async (event) => {
+    // event.preventDefault();
 
-  try {
-    const response = await fetch("/api/items", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const formData = {
+      category: category.value,
+      colors: Array.isArray(value) ? value.map((opt) => opt.value) : [],
+      pattern: isToggled ? pattern : "",
+      photoUrl: photoUrl,
+      email: email,
+    };
+    console.log(formData, "formdata");
 
-    if (response.ok) {
-      toast({
-        title: "Item saved successfully",
-        description: "Your item has been saved successfully.",
-        variant: "success",
-        duration: 3000,
-        
-      })
-      console.log("Item saved successfully");
-      router.back();
-    } else {
-     toast({
-       title: "Failed to save the item",
-       description: "Please try again later.",
-       variant: "destructive",
-       duration: 3000,
-     });
-      console.error("Failed to save the item");
-      router.refresh();
+    try {
+      const response = await fetch("/api/items", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Item saved successfully",
+          description: "Your item has been saved successfully.",
+          variant: "success",
+          duration: 3000,
+        });
+        console.log("Item saved successfully");
+        router.back();
+      } else {
+        toast({
+          title: "Failed to save the item",
+          description: "Please try again later.",
+          variant: "destructive",
+          duration: 3000,
+        });
+        console.error("Failed to save the item");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Error submitting the form", error);
     }
-  } catch (error) {
-    console.error("Error submitting the form", error);
-  }
-};
+  };
 
   return (
     <div className="w-full h-full flex flex-col overflow-y-auto scrollbar-hide">
@@ -253,59 +259,88 @@ const handleSubmit = async (event) => {
 
       {uploadedImage.length > 0 && (
         <div className="mt-5 py-10">
-          <form className="w-full pb-3" onSubmit={handleSubmit}>
+          <form className="w-full pb-3" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col md:flex-row md:justify-between w-full gap-5">
               <div className="w-full">
                 <label>Category</label>
-                <Select
-                  options={groupedOptions}
-                  formatGroupLabel={formatGroupLabel}
-                  onChange={handleSelectChange}
-                  theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      primary25: "#f0f0f0",
-                      neutral5: "#fff",
-                      neutral90: "#f0f0f0",
-                    },
-                  })}
-                  className="text-gray-900"
+                <Controller
+                  name="category"
+                  control={control}
+                  rules={{ required: "Category is required" }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={groupedOptions}
+                      formatGroupLabel={formatGroupLabel}
+                      theme={(theme) => ({
+                        ...theme,
+                        colors: {
+                          ...theme.colors,
+                          primary25: "#f0f0f0",
+                          neutral5: "#fff",
+                          neutral90: "#f0f0f0",
+                        },
+                      })}
+                      className="text-gray-900"
+                      onChange={(selectedOption) => {
+                        field.onChange(selectedOption);
+                        handleSelectChange(selectedOption);
+                      }}
+                    />
+                  )}
                 />
+                {errors.category && (
+                  <p className="text-red-500">{errors.category.message}Error</p>
+                )}
               </div>
               <div className="w-full">
                 <label>Color</label>
-                <CreatableSelect
-                  isClearable
-                  isDisabled={isLoading}
-                  isLoading={isLoading}
-                  onChange={(newValue, actionMeta) => {
-                    // If the action is a deselection and it's multi-select, ensure an array is always set
-                    if (
-                      actionMeta.action === "remove-value" ||
-                      actionMeta.action === "clear"
-                    ) {
-                      setValue(newValue || []);
-                    } else {
-                      setValue(newValue);
-                    }
-                  }}
-                  onCreateOption={handleCreate}
-                  options={options}
-                  value={value}
-                  isMulti
-                  theme={(theme) => ({
-                    ...theme,
-
-                    colors: {
-                      ...theme.colors,
-                      primary25: "#f0f0f0",
-                      neutral5: "#fff",
-                      neutral90: "#f0f0f0",
-                    },
-                  })}
-                  className="text-gray-900"
+                <Controller
+                  name="selectedOption"
+                  control={control}
+                  rules={{ required: "Please select at least one color" }} 
+                  render={({ field }) => (
+                    <CreatableSelect
+                      {...field}
+                      isClearable
+                      isDisabled={isLoading}
+                      isLoading={isLoading}
+                      options={options}
+                      value={value}
+                      isMulti
+                      className="text-gray-900"
+                      onChange={(newValue, actionMeta) => {
+                        if (
+                          actionMeta.action === "remove-value" ||
+                          actionMeta.action === "clear"
+                        ) {
+                          field.onChange(newValue || []);
+                          setValue(newValue || []);
+                        } else {
+                          field.onChange(newValue);
+                          setValue(newValue);
+                        }
+                      }}
+                      onCreateOption={handleCreate}
+                      theme={(theme) => ({
+                        ...theme,
+                        colors: {
+                          ...theme.colors,
+                          primary25: "#f0f0f0",
+                          neutral5: "#fff",
+                          neutral90: "#f0f0f0",
+                        },
+                      })}
+                    />
+                  )}
                 />
+              
+                {errors.selectedOption && (
+                  <p className="text-red-500">
+                    {errors.selectedOption.message}
+                  </p>
+                )}
+   
               </div>
             </div>
             <div className="w-full py-10">
