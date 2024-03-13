@@ -12,7 +12,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "res.cloudinary.com",
+        hostname: "stylesync.s3.amazonaws.com",
       },
       {
         protocol: "https",

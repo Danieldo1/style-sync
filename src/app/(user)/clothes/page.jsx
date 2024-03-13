@@ -1,12 +1,13 @@
-'use client'
+"use client";
 
-import Heading from '@/components/Heading'
-import React, { useEffect, useState } from 'react'
+import Heading from "@/components/Heading";
+import React, { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import RecentAddedItem from '@/components/RecentAddedItem';
-
+import RecentAddedItem from "@/components/RecentAddedItem";
+import CategoryItems from "@/components/CategoryItems";
+import { Button } from "@/components/ui/button";
 
 const ClothesPage = () => {
   const [data, setData] = useState([]);
@@ -40,7 +41,7 @@ const ClothesPage = () => {
   };
 
   return (
-    <section>
+    <section className="overflow-y-scroll scrollbar-hide">
       <Heading title="Clothes" subTitle="Your clothes" />
       <button
         onClick={() => {
@@ -55,22 +56,34 @@ const ClothesPage = () => {
       </button>
 
       <div className="flex justify-between items-center mt-5">
-        <button
+        <Button
+          variant="link"
           onClick={() => setShowRecentlyAdded(true)}
-          className={`cursor-pointer ${showRecentlyAdded ? "underline" : ""}`}
+          className={`cursor-pointer text-lg text-foreground font-semibold hover:underline ${
+            showRecentlyAdded ? "underline" : "text-foreground/50"
+          }`}
         >
-          Recently added
-        </button>
-        <button
+          Recently Added
+        </Button>
+        <Button
+          variant="link"
           onClick={() => setShowRecentlyAdded(false)}
-          className={`cursor-pointer ${!showRecentlyAdded ? "underline" : ""}`}
+          className={`cursor-pointer text-lg text-foreground font-semibold hover:underline ${
+            !showRecentlyAdded ? "underline" : "text-foreground/50"
+          }`}
         >
           Category
-        </button>
+        </Button>
       </div>
-      {showRecentlyAdded ? <RecentAddedItem data={data} loading={loading} /> : <CategoryItems />}
+      {showRecentlyAdded ? (
+        <div className="w-full h-full pb-5">
+          <RecentAddedItem data={data} loading={loading} />
+        </div>
+      ) : (
+        <CategoryItems />
+      )}
     </section>
   );
 };
 
-export default ClothesPage
+export default ClothesPage;
