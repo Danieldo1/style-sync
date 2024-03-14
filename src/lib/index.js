@@ -28,6 +28,13 @@ export const formatGroupLabel = (data) => (
   </div>
 );
 
+export  const formatLatLong = (latLang) => {
+    if (latLang && latLang.latitude && latLang.longitude) {
+      return `${latLang.latitude},${latLang.longitude}`;
+    }
+    return "";
+  };
+
 
 const topsOptions = [
   createOption("T-shirt"),
