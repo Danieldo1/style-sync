@@ -40,43 +40,60 @@ const RecentAddedItem = ({ data, loading,onDelete }) => {
  };
 
   return (
-    <div className="w-full h-full justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-10  mt-5 ">
-      {loading
-        ? Array(4)
-            .fill()
-            .map((_, index) => <LoadingSkeleton key={index} />)
-        : data.map((item) => (
-            <div
-              key={item._id}
-              className="border relative rounded-lg p-4 m-2 w-64 h-80 bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background transition-all duration-300 ease-in"
-            >
-              <button
-                onClick={() => openDialog(item._id)}
-                className="absolute top-2 right-2 p-2 z-[8] rounded-md  hover:bg-red-700 transition-all duration-300 ease-in"
+    <>
+      <div className="w-full h-full justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-10  mt-5 ">
+        {loading
+          ? Array(4)
+              .fill()
+              .map((_, index) => <LoadingSkeleton key={index} />)
+          : data.map((item) => (
+              <div
+                key={item._id}
+                className="border relative rounded-lg p-4 m-2 w-64 h-80 bg-primary-foreground hover:bg-muted-foreground hover:text-background hover:border-background transition-all duration-300 ease-in"
               >
-                <FaTrashCan />
-              </button>
-              <div className="w-full h-56 relative">
-                <Image
-                  src={item.photoUrl}
-                  alt={item.category}
-                  fill
-                  className=" object-cover mb-2"
-                />
+                <button
+                  onClick={() => openDialog(item._id)}
+                  className="absolute top-2 right-2 p-2 z-[8] rounded-md  hover:bg-red-700 transition-all duration-300 ease-in"
+                >
+                  <FaTrashCan />
+                </button>
+                <div className="w-full h-56 relative">
+                  <Image
+                    src={item.photoUrl}
+                    alt={item.category}
+                    fill
+                    className=" object-cover mb-2"
+                  />
+                </div>
+                <div className="text-xl capitalize">{item.category}</div>
+                <div className="text-base capitalize text-ring">
+                  {item.colors.join(", ")}
+                </div>
               </div>
-              <div className="text-xl capitalize">{item.category}</div>
-              <div className="text-base capitalize text-ring">
-                {item.colors.join(", ")}
-              </div>
-            </div>
-          ))}
-      <ConfirmDeleteDialog
-        isOpen={isDialogOpen}
-        onClose={closeDialog}
-        onConfirm={() => handleDelete(selectedItemId)}
-        itemDescription={data.find((item) => item._id === selectedItemId)?.category}
-      />
-    </div>
+            ))}
+        <ConfirmDeleteDialog
+          isOpen={isDialogOpen}
+          onClose={closeDialog}
+          onConfirm={() => handleDelete(selectedItemId)}
+          itemDescription={
+            data.find((item) => item._id === selectedItemId)?.category
+          }
+        />
+      </div>
+      {!loading && data.length === 0 && (
+        <div className="w-full h-full flex items-center flex-col justify-center ">
+          <h2 className="text-3xl text1 font-bold">Time to add something!</h2>
+          <Image
+            src="/empty.png"
+            alt="empty"
+            width={600}
+            height={600}
+            // className="w-full h-full"
+          />
+          <p className="text-foreground/70 font-semibold text-lg">No items added yet</p>
+        </div>
+      )}
+    </>
   );
 };
 
