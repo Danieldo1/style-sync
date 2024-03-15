@@ -4,6 +4,7 @@ import { formatLatLong } from '@/lib';
 import React, { useEffect, useState } from 'react'
 import WeatherWidget from '@/components/WeatherWidget'
 import LoadingWeather from '@/components/LoadingWeather'
+import fetchWeatherData from '@/lib/fetchWeatherData';
 
 const OutfitPage = () => {
   const [latLang, setLatLang] = useState('');
@@ -36,12 +37,10 @@ const OutfitPage = () => {
   
   const getUserWeather = async () => {
     const latLongString = formatLatLong(latLang);
-    
     try {
-      const response = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${latLongString}&aqi=no`
-      );
-      const data = await response.json();
+      const response = await fetchWeatherData(latLongString);
+      const data = response;
+      console.log(data )
       setWeather(data);
       setLoading(false);
     } catch (error) {
