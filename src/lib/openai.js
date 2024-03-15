@@ -1,31 +1,37 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPEN_AI_API_KEY,
+const openaiApiKey = process.env.NEXT_PUBLIC_OPEN_AI_API_KEY;
+
+const openai = new OpenAI({
+  apiKey: openaiApiKey,
+  dangerouslyAllowBrowser: true,
 });
 
-const openai = new OpenAIApi(configuration);
-
 const generateClothingSuggestions = async (
-  category,
-  colors,
-  pattern,
-  weather
+  eventType,
+  mood,
+  weatherTemp,
+  weatherCond,
+  clothingDescriptions, 
+  wind,
+//   category,
+//   color,
+//   pattern,
+//   id
 ) => {
-  const prompt = `You are a fashion industry expert. Given the category "${category}", colors "${colors.join(
-    ", "
-  )}", and pattern "${pattern}", please construct 3 different outfit looks. Consider the current weather conditions: ${
-    weather.weather[0].description
-  } and ${weather.main.temp}°C.`;
+  console.log(clothingDescriptions, "clothingDescriptions");
 
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
+  const prompt = `You are a fashion industry expert. Given only the following clothing items "${clothingDescriptions}", please construct 3 different outfit looks (if human doesn't specify or has any other clothes other than mentioned before, please do not make them up or don't come up with different colors that aren't provided, however only if the weather condition are to be considered you can add in parenthesis "suggested"). The person is going to ${eventType} and they are feeling ${mood}. Consider the current weather conditions: ${weatherCond}, with a wind speed of ${wind} km/h and ${weatherTemp}°C. Always return outfits in a structure of order, of top to bottom (attire wise) and attach product ids in the same order after each outfit return.  `;
+  console.log(prompt, "prompt");
+
+  const response = await openai.completions.create({
+    model: "gpt-3.5-turbo-instruct",
     prompt,
     max_tokens: 1000,
     temperature: 0.7,
   });
-
-  return response.data.choices[0].text.trim();
+console.log(response.choices[0].text,'response OpenAI');
+  return response.choices[0].text
 };
 
 export default generateClothingSuggestions;
