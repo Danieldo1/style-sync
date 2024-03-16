@@ -75,7 +75,7 @@ const OutfitPage = () => {
  };
 
   return (
-    <div>
+    <div className='ml-3'>
       <Heading title="Pick an outfit" subTitle="Time to get dressed" />
       {loading && Object.keys(weather).length === 0 && <LoadingWeather />}
       {!loading && Object.keys(weather).length > 0 && (

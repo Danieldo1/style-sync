@@ -57,7 +57,7 @@ const RecentAddedItem = ({ data, loading,onDelete }) => {
                 >
                   <FaTrashCan />
                 </button>
-                <div className="w-full h-56 relative">
+                <div className="w-full h-56 relative -rotate-90">
                   <Image
                     src={item.photoUrl}
                     alt={item.category}

@@ -153,7 +153,7 @@ const UploadingForm = () => {
       photoUrl: photoUrl,
       email: email,
     };
-    console.log(formData, "formdata");
+
 
     try {
       const response = await fetch("/api/items", {
@@ -190,7 +190,7 @@ const UploadingForm = () => {
 
   return (
     <div className="w-full h-full flex flex-col overflow-y-auto scrollbar-hide">
-      <div className="max-w-md mx-auto  lg:max-w-3xl xl:max-w-5xl h-full  w-full  flex-col lg:justify-between lg:flex-row flex gap-5">
+      <div className="max-w-md mx-auto  lg:max-w-4xl lg:gap-20 xl:max-w-5xl h-full  w-full  flex-col lg:justify-between lg:flex-row flex gap-5">
         {!imgUpload && uploadedImage.length === 0 && (
           <div className="w-full h-[80%] flex justify-center items-center ">
             <label
@@ -222,14 +222,17 @@ const UploadingForm = () => {
         )}
 
         {!imgUpload && uploadedImage.length > 0 && (
-          <div className=" w-full h-full  flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
-            <div className="aspect-square  w-full h-full  relative rounded-md">
-              <Image
-                src={uploadedImage}
-                alt="clothes"
-                fill
-                className="object-cover rounded-sm"
-              />
+          <div className="flex flex-col w-full h-full">
+            <label>Original Image</label>
+            <div className=" w-full h-full -rotate-90 flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
+              <div className="aspect-square  w-full h-full  relative rounded-md">
+                <Image
+                  src={uploadedImage}
+                  alt="clothes"
+                  fill
+                  className="object-cover rounded-sm "
+                />
+              </div>
             </div>
           </div>
         )}
@@ -243,14 +246,17 @@ const UploadingForm = () => {
               </div>
             </div>
           ) : (
-            <div className="w-full h-full flex justify-center items-center bg-primary-foreground border-dashed border-2 rounded-md gap-2 p-3 transition-all duration-300 ease-in outline-none">
-              <div className="aspect-square w-full h-full relative rounded-md">
-                <Image
-                  src={image}
-                  alt="clothes"
-                  fill
-                  className="object-cover"
-                />
+            <div className="flex flex-col w-full h-full">
+              <label>Removed Background</label>
+              <div className="w-full h-full flex -rotate-90 justify-center items-center ">
+                <div className="aspect-square w-full h-full relative rounded-md">
+                  <Image
+                    src={image}
+                    alt="clothes"
+                    fill
+                    className="object-cover rounded-sm"
+                  />
+                </div>
               </div>
             </div>
           )
@@ -298,7 +304,7 @@ const UploadingForm = () => {
                 <Controller
                   name="selectedOption"
                   control={control}
-                  rules={{ required: "Please select at least one color" }} 
+                  rules={{ required: "Please select at least one color" }}
                   render={({ field }) => (
                     <CreatableSelect
                       {...field}
@@ -334,13 +340,12 @@ const UploadingForm = () => {
                     />
                   )}
                 />
-              
+
                 {errors.selectedOption && (
                   <p className="text-red-500">
                     {errors.selectedOption.message}
                   </p>
                 )}
-   
               </div>
             </div>
             <div className="w-full py-10">
