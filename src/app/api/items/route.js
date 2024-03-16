@@ -56,3 +56,17 @@ export const DELETE = async (req) => {
     return Response.json({ success: false, error });
   }
 }
+
+export const PATCH = async (req) => {
+  const id = req.url.split("=").pop();
+  const { rotationDegree } = await req.json();
+
+  await connectDB();
+  try {
+    await Item.updateOne({ _id: id }, { rotationDegree });
+    return Response.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    return Response.json({ success: false, error });
+  }
+}

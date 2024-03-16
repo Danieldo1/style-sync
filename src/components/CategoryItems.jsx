@@ -61,7 +61,10 @@ const CategoryItems = ({ data, onDelete }) => {
                     >
                       <FaTrashCan />
                     </button>
-                    <div className="w-full h-56 relative -rotate-90">
+                    <div
+                      className="w-full h-56 relative "
+                      style={{ transform: `rotate(${item.rotationDegree}deg)` }}
+                    >
                       <Image
                         src={item.photoUrl}
                         alt={item.category}

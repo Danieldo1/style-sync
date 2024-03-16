@@ -73,21 +73,20 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
         <div>
           {groupedOutfits.map((outfit, index) => (
             <div key={index} className="flex flex-col">
-              {outfit.description.split(" - ").map((item, itemIndex) => (
-                <span key={itemIndex} className="text-xl font-semibold flex-1 flex">
-                  {itemIndex > 0 && <br />}
-                  {item}
-                </span>
-              ))}
-              <div className="items">
+              {outfit.description.split(" ").slice(0, 2).join(" ")}
+              <div className="flex flex-wrap">
                 {outfit.items
-                  .filter((item) => item !== null && item !== undefined) // Filter out null values
+                  .filter((item) => item !== null && item !== undefined)
                   .map((item, index) => (
-                    <div key={item._id + index} className="item">
+                    <div
+                      key={item._id + index}
+                      className="relative h-20 w-20"
+                      style={{ transform: `rotate(${item.rotationDegree}deg)` }}
+                    >
                       <img
                         src={item.photoUrl}
                         alt={item.description}
-                        className="-rotate-90"
+                        className=" object-cover"
                       />
                     </div>
                   ))}
