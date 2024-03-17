@@ -4,6 +4,7 @@ import generateClothingSuggestions from "@/lib/openai";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
+import { TiHeart } from "react-icons/ti";
 
 const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [eventType, setEventType] = useState("");
@@ -50,49 +51,72 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const getUserOutfit = async () => {
     const response = await fetch(`/api/findItemsUser?email=${email}`);
     const userItems = await response.json();
-    
-    const outfitsText = suggestions ? suggestions.split("\n\n") : [];
-  
+
+    const outfitsText = suggestions ? suggestions.trim().split(/\n{2,}/) : [];
+
     if (outfitsText) {
       const groupedOutfits = outfitsText.map((outfitText) => {
-        
-      const outfitProductIds = outfitText.match(/[\w\d]{6}/g) || [];
-      const outfitItems = outfitProductIds.map((productId) => {
-        const productIdLowercase = productId.toLowerCase(); 
-        return userItems.find(
-          (item) => item._id.toLowerCase() === productIdLowercase
-        );
-      });
-          
+        const outfitProductIds = outfitText.match(/[\w\d]{6}/g) || [];
+        const outfitItems = outfitProductIds.map((productId) => {
+          const productIdLowercase = productId.toLowerCase();
+          return userItems.find(
+            (item) => item._id.toLowerCase() === productIdLowercase
+          );
+        });
+      
         return {
           description: outfitText.replace(/\(([\w\d]{6})\)/g, "").trim(),
           items: outfitItems,
         };
       });
       return (
-        <div>
-          {groupedOutfits.map((outfit, index) => (
-            <div key={index} className="flex flex-col">
-              {outfit.description.split(" ").slice(0, 2).join(" ")}
-              <div className="flex flex-wrap">
-                {outfit.items
-                  .filter((item) => item !== null && item !== undefined)
-                  .map((item, index) => (
-                    <div
-                      key={item._id + index}
-                      className="relative h-20 w-20"
-                      style={{ transform: `rotate(${item.rotationDegree}deg)` }}
-                    >
-                      <img
-                        src={item.photoUrl}
-                        alt={item.description}
-                        className=" object-cover"
-                      />
-                    </div>
-                  ))}
-              </div>
-            </div>
-          ))}
+        <div className="flex flex-col -gap-5 mt-5 max-w-3xl mx-auto">
+          {groupedOutfits.length > 0 &&
+            groupedOutfits.map((outfit, index) => {
+                      const firstQuoteIndex =
+                        outfit.description.indexOf('"') + 1;
+                      const lastQuoteIndex =
+                        outfit.description.lastIndexOf('"');
+                      const outfitPrefix = outfit.description.substring(
+                        0,
+                        firstQuoteIndex
+                      );
+                      
+                      const outfitName = outfit.description.substring(
+                        firstQuoteIndex,
+                        lastQuoteIndex+1
+                      );
+                      const displayInformation = outfitPrefix + outfitName;
+              return (
+                <div key={index} className="w-full mt-5 relative">
+                  <p className="text-xl font-semibold text-center">
+                    {displayInformation}
+                  </p>
+                  <button className="absolute top-10 right-2 p-2 z-[8] rounded-md  ">
+                    <TiHeart className="w-8 h-8  hover:text-red-500 transition-all duration-300 ease-in" />
+                  </button>
+                  <div className="grid grid-cols-2 justify-self-center -gap-5 bg-secondary rounded-xl p-5">
+                    {outfit.items
+                      .filter((item) => item) 
+                      .map((item, itemIndex) => (
+                        <div
+                          key={item._id + itemIndex}
+                          className="relative flex items-center justify-center w-full h-full"
+                          style={{
+                            transform: `rotate(${item.rotationDegree}deg)`,
+                          }}
+                        >
+                          <img
+                            src={item.photoUrl}
+                            alt={item.description}
+                            className="object-cover h-40 w-40"
+                          />
+                          {item._id}
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              );})}
         </div>
       );
     }
@@ -107,7 +131,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
               type="text"
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
-              className="bg-transparent h-4 w-60 border-b border-foreground focus:outline-none mx-2"
+              className="bg-transparent h-4 w-44 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
           </label>
 
@@ -118,7 +142,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
               type="text"
               value={mood}
               onChange={(e) => setMood(e.target.value)}
-              className="bg-transparent h-4 w-64 border-b border-foreground focus:outline-none mx-2"
+              className="bg-transparent h-4 w-48 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
           </label>
         </div>
@@ -137,7 +161,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
         <Button
-         onClick={()=>{}} 
+          onClick={() => {}}
           className="text-xl font-semibold mt-5 max-w-xl w-full mx-auto"
         >
           Randomize
