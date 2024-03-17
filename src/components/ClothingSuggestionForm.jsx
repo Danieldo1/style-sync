@@ -11,7 +11,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [mood, setMood] = useState("");
   const [suggestions, setSuggestions] = useState("");
   const [outfitsDisplay, setOutfitsDisplay] = useState(null);
-
+  const [likedOutfits, setLikedOutfits] = useState([]);
   useEffect(() => {
     if (suggestions.length > 0) {
       getUserOutfit().then(setOutfitsDisplay);
@@ -43,6 +43,19 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
       weatherCond,
       clothingDescriptions,
       wind
+    );
+
+    setSuggestions(suggestions);
+  };
+  const handleRandomize = async () => {
+    const suggestions = await generateClothingSuggestions(
+      eventType,
+      mood,
+      weatherTemp,
+      weatherCond,
+      clothingDescriptions,
+      wind,
+      false
     );
 
     setSuggestions(suggestions);
@@ -111,7 +124,6 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
                             alt={item.description}
                             className="object-cover h-40 w-40"
                           />
-                          {item._id}
                         </div>
                       ))}
                   </div>
@@ -161,7 +173,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
         <Button
-          onClick={() => {}}
+          onClick={handleRandomize}
           className="text-xl font-semibold mt-5 max-w-xl w-full mx-auto"
         >
           Randomize
