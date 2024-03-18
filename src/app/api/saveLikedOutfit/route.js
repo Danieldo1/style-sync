@@ -37,11 +37,11 @@ export const GET = async (req) => {
   
   try {
     const user = await User.findOne({ email: email });
-    const likedOutfits = await LikedOutfit.find({ user: user._id });
+    const likedOutfits = await LikedOutfit.find({ user: user._id }).sort({ createdAt: -1 });
    const itemsGroupedByOutfit = {};
 
    for (const outfit of likedOutfits) {
-     const outfitItems = await Item.find({ _id: { $in: outfit.items } });
+     const outfitItems = await Item.find({ _id: { $in: outfit.items } })
      itemsGroupedByOutfit[outfit._id] = outfitItems;
    }
     return Response.json({ itemsGroupedByOutfit });

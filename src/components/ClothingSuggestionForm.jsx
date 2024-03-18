@@ -42,8 +42,8 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
     return description;
   });
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
+   
     const suggestions = await generateClothingSuggestions(
       eventType,
       mood,

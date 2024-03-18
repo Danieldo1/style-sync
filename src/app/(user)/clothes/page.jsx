@@ -87,7 +87,7 @@ const handleDeleteItem = (deletedItemId) => {
           />
         </div>
       ) : (
-        <CategoryItems data={data} onDelete={handleDeleteItem}  />
+        <CategoryItems data={data} loading={loading} onDelete={handleDeleteItem}  />
       )}
     </section>
   );

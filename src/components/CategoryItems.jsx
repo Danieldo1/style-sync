@@ -5,8 +5,9 @@ import Image from "next/image";
 import { groupedOptions } from "@/lib";
 import { FaTrashCan } from "react-icons/fa6";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import LoadingSkeleton from "./LoadingSkeleton";
 
-const CategoryItems = ({ data, onDelete }) => {
+const CategoryItems = ({ data, onDelete, loading }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -37,6 +38,12 @@ const CategoryItems = ({ data, onDelete }) => {
   };
   return (
     <div className="">
+      {loading
+          ? Array(8)
+              .fill()
+              .map((_, index) => <LoadingSkeleton key={index} />):(
+                <>
+                
       {data.length > 0 &&
         groupedOptions.map((group) => (
           <div key={group.label}>
@@ -89,6 +96,8 @@ const CategoryItems = ({ data, onDelete }) => {
             </div>
           </div>
         ))}
+                </>
+              )}
       {data.length === 0 && (
         <div className="w-full h-full mt-5 flex items-center flex-col justify-center ">
           <h2 className="text-3xl text1 font-bold">Time to add something!</h2>
