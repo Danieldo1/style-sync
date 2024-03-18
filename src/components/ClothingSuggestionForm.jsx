@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 import { TiHeart } from "react-icons/ti";
 import { useToast } from "@/components/ui/use-toast";
+import { useForm } from "react-hook-form";
 
 const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [eventType, setEventType] = useState("");
@@ -25,6 +26,11 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const { data: session } = useSession();
   const email = session && session.user.email;
   const { toast } = useToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const clothingDescriptions = clothes.map((item) => {
     let description = `${item.colors.join(" with ")} ${item.category}`;
@@ -36,7 +42,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
     return description;
   });
 
-  const handleSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const suggestions = await generateClothingSuggestions(
       eventType,
@@ -66,7 +72,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
 
   const handleLikeOutfit = (index, outfitItems, email) => {
     const itemIds = outfitItems.map((item) => item._id);
-   
+
     handleSaveLikedOutfit(itemIds, email);
   };
 
@@ -79,8 +85,8 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
         },
         body: JSON.stringify({ itemIds }),
       });
-       await response.json();
-      
+      await response.json();
+
       toast({
         title: "Item saved to Favorites",
         description: "Your item has been saved successfully.",
@@ -155,7 +161,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
                       className={`w-8 h-8 hover:text-red-500 transition-all duration-300 ease-in `}
                     />
                   </button>
-                  
+
                   <div className="grid grid-cols-2 justify-self-center -gap-5 bg-secondary rounded-xl p-5">
                     {outfit.items
                       .filter((item) => item)
@@ -184,28 +190,29 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   };
   return (
     <div className="mt-5">
-      <form onSubmit={handleSubmit} className="flex flex-col ">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="mb-5 flex flex-col gap-2 lg:flex-row md:max-w-4xl md:mx-auto">
           <label className="text-xl font-semibold">
             I'm going to
             <input
               type="text"
-              value={eventType}
-              onChange={(e) => setEventType(e.target.value)}
+              {...register("eventType", { required: true })}
               className="bg-transparent h-4 w-44 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
+            {errors.eventType && <p className="text-red-500 text-sm ml-32 hidden lg:block">This field is required</p>}
           </label>
+            {errors.eventType && <span className="text-red-500 text-sm ml-36 lg:hidden ">This field is required</span>}
 
           <label className="text-xl font-semibold">
-            {" "}
             I'm feeling
             <input
               type="text"
-              value={mood}
-              onChange={(e) => setMood(e.target.value)}
+              {...register("mood", { required: true })}
               className="bg-transparent h-4 w-48 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
+            {errors.mood && <p className="text-red-500 text-sm ml-32 hidden lg:block">This field is required</p>}
           </label>
+            {errors.mood && <span className="text-red-500 text-sm ml-36 lg:hidden ">This field is required</span>}
         </div>
 
         <Button
@@ -215,6 +222,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
           Get Suggestions
         </Button>
       </form>
+
       <div className="mt-5 flex flex-col items-center">
         <div className="flex items-center gap-2 w-full md:max-w-xl md:mx-auto">
           <div className="flex-grow border-t border-gray-300"></div>
