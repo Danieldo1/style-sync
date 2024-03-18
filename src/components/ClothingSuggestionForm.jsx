@@ -66,8 +66,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
 
   const handleLikeOutfit = (index, outfitItems, email) => {
     const itemIds = outfitItems.map((item) => item._id);
-    console.log(index, itemIds, email, "outfitId, itemIds, email");
-    
+   
     handleSaveLikedOutfit(itemIds, email);
   };
 

@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import Image from "next/image";
+
 const ConfirmDeleteDialog = ({
   isOpen,
   onClose,
