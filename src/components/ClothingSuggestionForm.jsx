@@ -11,7 +11,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [mood, setMood] = useState("");
   const [suggestions, setSuggestions] = useState("");
   const [outfitsDisplay, setOutfitsDisplay] = useState(null);
-  const [likedOutfits, setLikedOutfits] = useState([]);
+
   useEffect(() => {
     if (suggestions.length > 0) {
       getUserOutfit().then(setOutfitsDisplay);
@@ -22,7 +22,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const wind = weather.current.wind_kph;
   const { data: session } = useSession();
   const email = session && session.user.email;
-
+// console.log(clothes, "clothes");
   const clothingDescriptions = clothes.map((item) => {
     let description = `${item.colors.join(" with ")} ${item.category}`;
     if (item.pattern) {
@@ -32,6 +32,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
     description += `, ${item._id};`;
     return description;
   });
+  // console.log(clothingDescriptions, "clothingDescriptions");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,6 +61,29 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
 
     setSuggestions(suggestions);
   };
+
+  const handleLikeOutfit = (outfitItems) => {
+    
+    const itemIds = outfitItems.map((item) => item._id);
+    console.log(itemIds, "itemIds"); 
+    handleSaveLikedOutfit(itemIds, email);
+  };
+
+  const handleSaveLikedOutfit = async (itemIds, email) => {
+    try {
+      const response = await fetch("/api/saveLikedOutfit?email=" + email + "", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ itemIds }),
+      });
+      const data = await response.json();
+      console.log(data, "data");
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const getUserOutfit = async () => {
     const response = await fetch(`/api/findItemsUser?email=${email}`);
@@ -105,12 +129,18 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
                   <p className="text-xl font-semibold text-center">
                     {displayInformation}
                   </p>
-                  <button className="absolute top-10 right-2 p-2 z-[8] rounded-md  ">
+                  <button
+                    onClick={() =>
+                      handleLikeOutfit(outfit.items.filter((item) => item), email)
+                    }
+                    className="absolute top-10 right-2 p-2 z-[8] rounded-md  "
+                  >
                     <TiHeart className="w-8 h-8  hover:text-red-500 transition-all duration-300 ease-in" />
                   </button>
+
                   <div className="grid grid-cols-2 justify-self-center -gap-5 bg-secondary rounded-xl p-5">
                     {outfit.items
-                      .filter((item) => item) 
+                      .filter((item) => item)
                       .map((item, itemIndex) => (
                         <div
                           key={item._id + itemIndex}
@@ -124,6 +154,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
                             alt={item.description}
                             className="object-cover h-40 w-40"
                           />
+                          <p>{item._id}</p>
                         </div>
                       ))}
                   </div>
