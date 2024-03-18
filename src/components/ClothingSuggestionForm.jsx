@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 import { TiHeart } from "react-icons/ti";
+import { useToast } from "@/components/ui/use-toast";
 
 const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [eventType, setEventType] = useState("");
@@ -17,12 +18,14 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
       getUserOutfit().then(setOutfitsDisplay);
     }
   }, [suggestions]);
+
   const weatherTemp = weather.current.temp_c;
   const weatherCond = weather.current.condition.text;
   const wind = weather.current.wind_kph;
   const { data: session } = useSession();
   const email = session && session.user.email;
-// console.log(clothes, "clothes");
+  const { toast } = useToast();
+
   const clothingDescriptions = clothes.map((item) => {
     let description = `${item.colors.join(" with ")} ${item.category}`;
     if (item.pattern) {
@@ -32,11 +35,9 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
     description += `, ${item._id};`;
     return description;
   });
-  // console.log(clothingDescriptions, "clothingDescriptions");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const suggestions = await generateClothingSuggestions(
       eventType,
       mood,
@@ -48,6 +49,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
 
     setSuggestions(suggestions);
   };
+
   const handleRandomize = async () => {
     const suggestions = await generateClothingSuggestions(
       eventType,
@@ -62,10 +64,10 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
     setSuggestions(suggestions);
   };
 
-  const handleLikeOutfit = (outfitItems) => {
-    
+  const handleLikeOutfit = (index, outfitItems, email) => {
     const itemIds = outfitItems.map((item) => item._id);
-    console.log(itemIds, "itemIds"); 
+    console.log(index, itemIds, email, "outfitId, itemIds, email");
+    
     handleSaveLikedOutfit(itemIds, email);
   };
 
@@ -78,12 +80,24 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
         },
         body: JSON.stringify({ itemIds }),
       });
-      const data = await response.json();
-      console.log(data, "data");
+       await response.json();
+      
+      toast({
+        title: "Item saved to Favorites",
+        description: "Your item has been saved successfully.",
+        variant: "success",
+        duration: 3000,
+      });
     } catch (error) {
+      toast({
+        title: "Failed to save the item",
+        description: "Please try again later.",
+        variant: "destructive",
+        duration: 3000,
+      });
       console.error(error);
     }
-  }
+  };
 
   const getUserOutfit = async () => {
     const response = await fetch(`/api/findItemsUser?email=${email}`);
@@ -100,30 +114,29 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
             (item) => item._id.toLowerCase() === productIdLowercase
           );
         });
-      
+
         return {
           description: outfitText.replace(/\(([\w\d]{6})\)/g, "").trim(),
           items: outfitItems,
         };
       });
+
       return (
         <div className="flex flex-col -gap-5 mt-5 max-w-3xl mx-auto">
           {groupedOutfits.length > 0 &&
             groupedOutfits.map((outfit, index) => {
-                      const firstQuoteIndex =
-                        outfit.description.indexOf('"') + 1;
-                      const lastQuoteIndex =
-                        outfit.description.lastIndexOf('"');
-                      const outfitPrefix = outfit.description.substring(
-                        0,
-                        firstQuoteIndex
-                      );
-                      
-                      const outfitName = outfit.description.substring(
-                        firstQuoteIndex,
-                        lastQuoteIndex+1
-                      );
-                      const displayInformation = outfitPrefix + outfitName;
+              const firstQuoteIndex = outfit.description.indexOf('"') + 1;
+              const lastQuoteIndex = outfit.description.lastIndexOf('"');
+              const outfitPrefix = outfit.description.substring(
+                0,
+                firstQuoteIndex
+              );
+
+              const outfitName = outfit.description.substring(
+                firstQuoteIndex,
+                lastQuoteIndex + 1
+              );
+              const displayInformation = outfitPrefix + outfitName;
               return (
                 <div key={index} className="w-full mt-5 relative">
                   <p className="text-xl font-semibold text-center">
@@ -131,13 +144,19 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
                   </p>
                   <button
                     onClick={() =>
-                      handleLikeOutfit(outfit.items.filter((item) => item), email)
+                      handleLikeOutfit(
+                        index,
+                        outfit.items.filter((item) => item),
+                        email
+                      )
                     }
-                    className="absolute top-10 right-2 p-2 z-[8] rounded-md  "
+                    className="absolute top-10 right-2 p-2 z-[8] rounded-md"
                   >
-                    <TiHeart className="w-8 h-8  hover:text-red-500 transition-all duration-300 ease-in" />
+                    <TiHeart
+                      className={`w-8 h-8 hover:text-red-500 transition-all duration-300 ease-in `}
+                    />
                   </button>
-
+                  
                   <div className="grid grid-cols-2 justify-self-center -gap-5 bg-secondary rounded-xl p-5">
                     {outfit.items
                       .filter((item) => item)
@@ -154,12 +173,12 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
                             alt={item.description}
                             className="object-cover h-40 w-40"
                           />
-                          <p>{item._id}</p>
                         </div>
                       ))}
                   </div>
                 </div>
-              );})}
+              );
+            })}
         </div>
       );
     }

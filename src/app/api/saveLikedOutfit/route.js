@@ -4,7 +4,7 @@ import User from "@/lib/models/User";
 
 export const POST = async (req) => {
     const email = req.url.split("/").pop().split("=").pop();
-    console.log(email, "email");
+    
     await connectDB();
     const { itemIds } = await req.json();
     try {
