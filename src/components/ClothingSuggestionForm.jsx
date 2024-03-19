@@ -193,26 +193,43 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="mb-5 flex flex-col gap-2 lg:flex-row md:max-w-4xl md:mx-auto">
           <label className="text-xl font-semibold">
-            I'm going to
+            I&apos;m going to
             <input
               type="text"
+              
               {...register("eventType", { required: true })}
               className="bg-transparent h-4 w-44 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
-            {errors.eventType && <p className="text-red-500 text-sm ml-32 hidden lg:block">This field is required</p>}
+            {errors.eventType && (
+              <p className="text-red-500 text-sm ml-32 hidden lg:block">
+                This field is required
+              </p>
+            )}
           </label>
-            {errors.eventType && <span className="text-red-500 text-sm ml-36 lg:hidden ">This field is required</span>}
+          {errors.eventType && (
+            <span className="text-red-500 text-sm ml-36 lg:hidden ">
+              This field is required
+            </span>
+          )}
 
           <label className="text-xl font-semibold">
-            I'm feeling
+            I&apos;m feeling
             <input
               type="text"
               {...register("mood", { required: true })}
               className="bg-transparent h-4 w-48 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
-            {errors.mood && <p className="text-red-500 text-sm ml-32 hidden lg:block">This field is required</p>}
+            {errors.mood && (
+              <p className="text-red-500 text-sm ml-32 hidden lg:block">
+                This field is required
+              </p>
+            )}
           </label>
-            {errors.mood && <span className="text-red-500 text-sm ml-36 lg:hidden ">This field is required</span>}
+          {errors.mood && (
+            <span className="text-red-500 text-sm ml-36 lg:hidden ">
+              This field is required
+            </span>
+          )}
         </div>
 
         <Button

@@ -1,6 +1,9 @@
+'use server';
+
 import OpenAI from "openai";
 
-const openaiApiKey = process.env.NEXT_PUBLIC_OPEN_AI_API_KEY;
+
+const openaiApiKey = process.env.OPEN_AI_API_KEY;
 
 const openai = new OpenAI({
   apiKey: openaiApiKey,
@@ -30,3 +33,15 @@ const generateClothingSuggestions = async (
 };
 
 export default generateClothingSuggestions;
+
+export const getUserLatLng = async () => {
+  try {
+   const response = await fetch(
+      `https://api.geoapify.com/v1/ipinfo?&apiKey=${process.env.GEOAPIFY_API_KEY}`
+    );
+  return  response.json();
+  } catch (error) {
+    console.error("Error fetching user location:", error);
+  }
+};
+

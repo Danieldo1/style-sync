@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import Image from "next/image";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 import { colors, createOption, groupedOptions, formatGroupLabel } from "@/lib";
@@ -12,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useForm, Controller } from "react-hook-form";
+import { S3Client,PutObjectCommand } from "@aws-sdk/client-s3";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -44,82 +43,85 @@ const UploadingForm = () => {
       category: "",
     },
   });
-
-  const grabImage = async (event) => {
-    const imageInput = document.querySelector('input[type="file"]');
-    setImgUpload(true);
-    const file = imageInput.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    const response = await fetch(
-      `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const data = await response.json();
-    const UploadedImg = data.data.url;
-    setUploadedImage(UploadedImg);
-    setImgUpload(false);
-    setLoading(true);
-    const res = await fetch("/api/removeBg", {
+const grabImage = async (event) => {
+  const imageInput = document.querySelector('input[type="file"]');
+  setImgUpload(true);
+  const file = imageInput.files[0];
+  const formData = new FormData();
+  formData.append("image", file);
+  const response = await fetch(
+    `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+    {
       method: "POST",
-      body: JSON.stringify({
-        file: UploadedImg,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const result = await res.json();
-    setImage(result);
-    setLoading(false);
-    const imageResponse = await fetch(result);
-
-    const imageBlob = await imageResponse.blob();
-
-    const s3Upload = await uploadAWS(imageBlob);
-
-    if (s3Upload.ok) {
-      const s3ImageUrl = await s3Upload.json();
-      console.log(s3ImageUrl, "s3ImageUrl");
-      setPhotoUrl(s3ImageUrl);
-    } else {
-      console.log("error uploading image");
+      body: formData,
     }
-  };
+  );
+  const data = await response.json();
+  const UploadedImg = data.data.url;
+  setUploadedImage(UploadedImg);
+  setImgUpload(false);
+  setLoading(true);
+  const res = await fetch("/api/removeBg", {
+    method: "POST",
+    body: JSON.stringify({
+      file: UploadedImg,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const result = await res.json();
+  setImage(result);
+  setLoading(false);
+  const imageResponse = await fetch(result);
 
-  const uploadAWS = async (file) => {
-    const myAWSAccessKey = process.env.NEXT_PUBLIC_MY_AWS_ACCESS_KEY;
-    const myAWSSecretKey = process.env.NEXT_PUBLIC_MY_AWS_SECRET_KEY;
-    const myAWSBucket = process.env.NEXT_PUBLIC_MY_AWS_BUCKET;
-    const s3Client = new S3Client({
-      region: "eu-north-1",
-      credentials: {
-        accessKeyId: myAWSAccessKey,
-        secretAccessKey: myAWSSecretKey,
-      },
-    });
+  const imageBlob = await imageResponse.blob();
 
-    const ext = file.type.split("/")[1];
+  const s3Upload = await uploadAWS(imageBlob);
 
-    const newFIle = new Date().getTime() + "." + ext;
+  if (s3Upload.ok) {
+    const s3ImageUrl = await s3Upload.json();
+    console.log(s3ImageUrl, "s3ImageUrl");
+    setPhotoUrl(s3ImageUrl);
+  } else {
+    console.log("error uploading image");
+  }
+};
 
-    const body = new Blob([file], { type: file.type });
+const uploadAWS = async (file) => {
+  console.log(file, "file");
+  const myAWSAccessKey = process.env.NEXT_PUBLIC_MY_AWS_ACCESS_KEY;
+  const myAWSSecretKey = process.env.NEXT_PUBLIC_MY_AWS_SECRET_KEY;
+  const myAWSBucket = process.env.NEXT_PUBLIC_MY_AWS_BUCKET;
+  const s3Client = new S3Client({
+    region: "eu-north-1",
+    credentials: {
+      accessKeyId: myAWSAccessKey,
+      secretAccessKey: myAWSSecretKey,
+    },
+  });
 
-    s3Client.send(
-      new PutObjectCommand({
-        Bucket: myAWSBucket,
-        Key: newFIle,
-        Body: body,
-        ContentType: file.type,
-        ACL: "public-read",
-      })
-    );
+  const ext = file.type.split("/")[1];
 
-    return Response.json(`https://${myAWSBucket}.s3.amazonaws.com/${newFIle}`);
-  };
+  const newFIle = new Date().getTime() + "." + ext;
+
+  const body = new Blob([file], { type: file.type });
+
+  s3Client.send(
+    new PutObjectCommand({
+      Bucket: myAWSBucket,
+      Key: newFIle,
+      Body: body,
+      ContentType: file.type,
+      ACL: "public-read",
+    })
+  );
+
+  return Response.json(`https://${myAWSBucket}.s3.amazonaws.com/${newFIle}`);
+};
+  
+
+  
 
   const handleCreate = (inputValue) => {
     setIsLoading(true);

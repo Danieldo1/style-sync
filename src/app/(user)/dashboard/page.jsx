@@ -2,12 +2,25 @@
 
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
-
+import axios from "axios";
 import { Button } from "@/components/ui/button";
+
 const DashboardPage = () => {
   const { data: session } = useSession();
+  const email = session && session.user.email;
   const router = useRouter();
- 
+  
+
+  const subscribeUser = async () => {
+    try {
+      const response = await axios.get("/api/payment?email=" + email);
+      console.log(response);
+      window.location.href = response.data.url;
+    } catch (error) {
+      console.error("Something went wrong, please try again later");
+    }
+  };
+
   if (session) {
     // rendering components for logged in users
     return (
@@ -16,17 +29,10 @@ const DashboardPage = () => {
           Welcome <span className="font-bold">{session.user?.name}</span>
         </p>
 
-        <Button
-        variant='destructive'
-          size="lg"
-          onClick={() => signOut()}
-          className='w-10'
-        >
-          Sign out
-        </Button>
+        <button onClick={subscribeUser}>Subscribe Now</button>
       </div>
     );
-  } 
+  }
 };
 
 export default DashboardPage;

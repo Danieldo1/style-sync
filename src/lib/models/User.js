@@ -14,6 +14,10 @@ const UserSchema = new Schema(
     email: String,
     name: String,
     items: [ItemSchema],
+   count:{
+    type:Number,
+    default:22
+   }
   },
   {
     timestamps: true,

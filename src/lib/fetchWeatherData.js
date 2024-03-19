@@ -1,11 +1,11 @@
-
-import axios from "axios";
+'use server'
 
 const fetchWeatherData = async (latLongString) => {
-  const response = await axios.get(
-    `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${latLongString}&aqi=no`
+  const response = await fetch(
+    `https://api.weatherapi.com/v1/current.json?key=${process.env.WEATHER_API_KEY}&q=${latLongString}&aqi=no`
   );
-  return response.data;
+
+  return response.json();
 };
 
 export default fetchWeatherData;
