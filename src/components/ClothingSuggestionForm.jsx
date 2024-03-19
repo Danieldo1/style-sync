@@ -29,9 +29,11 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
-
+const event = watch("eventType");
+const feeling = watch("mood");
   const clothingDescriptions = clothes.map((item) => {
     let description = `${item.colors.join(" with ")} ${item.category}`;
     if (item.pattern) {
@@ -45,12 +47,13 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const onSubmit = async () => {
    
     const suggestions = await generateClothingSuggestions(
-      eventType,
-      mood,
+      event,
+      feeling,
       weatherTemp,
       weatherCond,
       clothingDescriptions,
-      wind
+      wind,
+      true
     );
 
     setSuggestions(suggestions);
@@ -58,8 +61,8 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
 
   const handleRandomize = async () => {
     const suggestions = await generateClothingSuggestions(
-      eventType,
-      mood,
+      event,
+      feeling,
       weatherTemp,
       weatherCond,
       clothingDescriptions,
@@ -103,6 +106,8 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
       console.error(error);
     }
   };
+
+
 
   const getUserOutfit = async () => {
     const response = await fetch(`/api/findItemsUser?email=${email}`);
@@ -196,7 +201,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
             I&apos;m going to
             <input
               type="text"
-              
+            
               {...register("eventType", { required: true })}
               className="bg-transparent h-4 w-44 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
@@ -206,6 +211,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
               </p>
             )}
           </label>
+           
           {errors.eventType && (
             <span className="text-red-500 text-sm ml-36 lg:hidden ">
               This field is required
