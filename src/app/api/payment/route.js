@@ -9,7 +9,7 @@ import connectDB from '@/lib/connectDB'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2023-10-16',
 })
-
+export const dynamic = "force-dynamic";
 export async function GET(req) {
  try{
     await connectDB();

@@ -2,7 +2,7 @@ import connectDB from "@/lib/connectDB";
 import LikedOutfit from "@/lib/models/LikedOutfit";
 import User from "@/lib/models/User";
 import Item from "@/lib/models/Item";
-
+export const dynamic = "force-dynamic";
 export const POST = async (req) => {
     const email = req.url.split("/").pop().split("=").pop();
     

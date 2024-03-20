@@ -23,6 +23,7 @@ async function generateUniqueShortId(length) {
 
   return shortId;
 }
+export const dynamic = "force-dynamic";
 export const POST = async (req) => {
   const { category,colors,pattern,photoUrl,email } = await req.json();
   await connectDB();
