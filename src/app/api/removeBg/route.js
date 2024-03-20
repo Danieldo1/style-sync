@@ -1,7 +1,8 @@
 import Replicate from "replicate";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
+export const maxDuration = 15000;
+export const runtime = "edge";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
