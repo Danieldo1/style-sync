@@ -4,7 +4,7 @@ import User from "@/lib/models/User";
 import Item from "@/lib/models/Item";
 export const dynamic = "force-dynamic";
 export const POST = async (req) => {
-    const email = req.url.split("/").pop().split("=").pop();
+    const email = decodeURIComponent(req.url.split("/").pop().split("=").pop());
     
     await connectDB();
     const { itemIds } = await req.json();

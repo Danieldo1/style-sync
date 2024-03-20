@@ -13,7 +13,9 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
  try{
     await connectDB();
-    const userEmail = req.nextUrl.searchParams.get("email");
+    const userEmail = decodeURIComponent(
+      req.url.split("/").pop().split("=").pop()
+    );
  
  const userInfo = await User.findOne({email: userEmail});
  const userId = userInfo._id;

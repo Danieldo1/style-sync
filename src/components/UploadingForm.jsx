@@ -99,7 +99,7 @@ dataForm.append("file", imageBlob);
 
    const checkSub = async ( email) => {
     const id = await fetchUserId(email);
-    console.log(id,'ID USER')
+  
    }
 
   const handleCreate = (inputValue) => {
@@ -151,7 +151,6 @@ dataForm.append("file", imageBlob);
           variant: "success",
           duration: 3000,
         });
-        console.log("Item saved successfully");
         router.back();
       } else {
         toast({

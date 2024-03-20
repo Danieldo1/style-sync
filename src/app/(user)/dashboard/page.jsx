@@ -14,7 +14,6 @@ const DashboardPage = () => {
   const subscribeUser = async () => {
     try {
       const response = await axios.get("/api/payment?email=" + email);
-      console.log(response);
       window.location.href = response.data.url;
     } catch (error) {
       console.error("Something went wrong, please try again later");

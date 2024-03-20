@@ -24,7 +24,7 @@ const RecentAddedItem = ({ data, loading, onDelete }) => {
       });
       if (response.ok) {
         onDelete(itemId);
-        console.log("Item deleted successfully");
+        
       } else {
         console.error("Failed to delete the item");
       }
@@ -43,15 +43,14 @@ const RecentAddedItem = ({ data, loading, onDelete }) => {
         body: JSON.stringify({ rotationDegree }),
       });
       if (response.ok) {
-        console.log("Rotation degree updated successfully");
-        return true; // Indicate success
+        return true; 
       } else {
         console.error("Failed to update rotation degree");
-        return false; // Indicate failure
+        return false;
       }
     } catch (error) {
       console.error("Error updating rotation degree:", error);
-      return false; // Indicate failure
+      return false; 
     }
   };
 

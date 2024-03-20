@@ -19,7 +19,7 @@ const CategoryItems = ({ data, onDelete, loading }) => {
       });
       if (response.ok) {
         onDelete(itemId);
-        console.log("Item deleted successfully");
+     
       } else {
         console.error("Failed to delete the item");
       }
