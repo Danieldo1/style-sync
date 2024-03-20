@@ -110,7 +110,9 @@ const feeling = watch("mood");
 
 
   const getUserOutfit = async () => {
-    const response = await fetch(`/api/findItemsUser?email=${email}`);
+    const response = await fetch(`/api/findItemsUser?email=${email}`, {
+      cache: "no-store",
+    });
     const userItems = await response.json();
 
     const outfitsText = suggestions ? suggestions.trim().split(/\n{2,}/) : [];

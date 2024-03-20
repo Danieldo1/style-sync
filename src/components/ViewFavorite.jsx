@@ -24,7 +24,9 @@ const ViewFavorite = () => {
 
   const fetchUserFavorites = async () => {
     try {
-      const response = await fetch(`/api/saveLikedOutfit?email=${email}`);
+      const response = await fetch(`/api/saveLikedOutfit?email=${email}`, {
+        cache: "no-store",
+      });
       const data = await response.json();
       setFavorites(data);
       setLoading(false);
@@ -50,6 +52,7 @@ const ViewFavorite = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ likedOutfitId }),
+        cache: "no-store",
       });
 
       const result = await response.json();

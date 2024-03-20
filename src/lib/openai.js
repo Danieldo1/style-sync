@@ -40,14 +40,3 @@ export default generateClothingSuggestions;
 
 
 
-export const getUserLatLng = async () => {
-  try {
-   const response = await fetch(
-      `https://api.geoapify.com/v1/ipinfo?&apiKey=${process.env.GEOAPIFY_API_KEY}`
-    );
-  return  response.json();
-  } catch (error) {
-    console.error("Error fetching user location:", error);
-  }
-};
-

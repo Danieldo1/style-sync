@@ -7,7 +7,8 @@ import fetchWeatherData from '@/lib/fetchWeatherData';
 import ClothingSuggestionForm from '@/components/ClothingSuggestionForm';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { getUserLatLng } from '@/lib/openai';
+
+
 
 
 const OutfitPage = () => {
@@ -37,9 +38,10 @@ const OutfitPage = () => {
 
   const fetchUserLatLong = async () => {
     try {
-      const latLang = await getUserLatLng();
-  
-     setLatLang(latLang);
+      const locationFetch = await fetch(`/api/latLong`, { cache: "no-store" });
+      const locationData = await locationFetch.json();
+      console.log(locationData.data.location, 'location data');
+     setLatLang(locationData.data.location);
   } catch (error) {
     console.error('Error fetching user lat/long:', error);
   }
@@ -47,11 +49,12 @@ const OutfitPage = () => {
   
   const getUserWeather = async () => {
    
-   const latLongString = `${latLang.location.latitude},${latLang.location.longitude}`;
-   
+   const latLongString = `${latLang.latitude},${latLang.longitude}`;
+   console.log(latLongString, 'latlong string');
     try {
       const response = await fetchWeatherData(latLongString);
-      const data = response;
+      const data = await response;
+      console.log(data,'weather data');
       setWeather(data);
       
     } catch (error) {
@@ -61,7 +64,7 @@ const OutfitPage = () => {
 
  const getUserItems = async () => {
    try {
-     const response = await fetch(`/api/findItemsUser?email=${email}`);
+     const response = await fetch(`/api/findItemsUser?email=${email}`,{cache: "no-store"});
      if (response.ok) {
        const items = await response.json();
        setClothes(items);
@@ -101,6 +104,7 @@ const OutfitPage = () => {
   return (
     <div className="ml-3">
       <Heading title="Pick an outfit" subTitle="Time to get dressed" />
+      
       {loading && Object.keys(weather).length === 0 && <LoadingWeather />}
       {!loading && Object.keys(weather).length > 0 && (
         <>

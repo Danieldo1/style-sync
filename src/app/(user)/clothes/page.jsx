@@ -26,7 +26,9 @@ const ClothesPage = () => {
   const getUserItems = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/findItemsUser?email=${email}`);
+      const response = await fetch(`/api/findItemsUser?email=${email}`, {
+        cache: "no-store",
+      });
       if (response.ok) {
         const items = await response.json();
         setData(items);
