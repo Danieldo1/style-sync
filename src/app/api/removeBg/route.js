@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
-export const runtime = "nodejs";
+export const runtime = "edge";
 export const POST = async (req) => {
   const { file } = await req.json();
   const output = await replicate.run(
