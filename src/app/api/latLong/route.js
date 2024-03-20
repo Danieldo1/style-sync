@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 export const GET = async (req) => {
       try {
        const latLong= await fetch(
