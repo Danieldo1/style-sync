@@ -2,7 +2,7 @@ import connectDB from "@/lib/connectDB";
 import Item from "@/lib/models/Item";
 import User from "@/lib/models/User";
 const crypto = require("crypto");
-export const runtime = "nodejs";
+
 async function generateUniqueShortId(length) {
   let isUnique = false;
   let shortId;
