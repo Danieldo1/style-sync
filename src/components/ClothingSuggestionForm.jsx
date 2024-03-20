@@ -203,7 +203,7 @@ const feeling = watch("mood");
             I&apos;m going to
             <input
               type="text"
-            
+            autoComplete="off"
               {...register("eventType", { required: true })}
               className="bg-transparent h-4 w-44 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
@@ -224,6 +224,8 @@ const feeling = watch("mood");
             I&apos;m feeling
             <input
               type="text"
+              autoComplete="off"
+              
               {...register("mood", { required: true })}
               className="bg-transparent h-4 w-48 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />

@@ -33,7 +33,7 @@ export const DELETE = async (req) => {
 
 export const GET = async (req) => {
     await connectDB();
-  const email = req.url.split("/").pop().split("=").pop();
+  const email = decodeURIComponent(req.url.split("/").pop().split("=").pop());
   
   try {
     const user = await User.findOne({ email: email });

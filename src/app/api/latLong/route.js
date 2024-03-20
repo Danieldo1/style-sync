@@ -9,6 +9,8 @@ export const GET = async (req) => {
     //   `https://api.geoapify.com/v1/ipinfo?&apiKey=${process.env.GEOAPIFY_API_KEY}`
     // );
     // const data = await latLong.json();
+    
+    // WORKS ON VERCEL
     const locationLat = headers().get("x-vercel-ip-latitude") || 0;
     const locationLong = headers().get("x-vercel-ip-longitude") || 0;
 

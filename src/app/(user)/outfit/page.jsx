@@ -40,7 +40,7 @@ const OutfitPage = () => {
     try {
       const locationFetch = await fetch(`/api/latLong`, { cache: "no-store" });
       const locationData = await locationFetch.json();
-   console.log(locationData.data,'locationData.data');
+
      setLatLang(locationData.data);
   } catch (error) {
     console.error('Error fetching user lat/long:', error);
