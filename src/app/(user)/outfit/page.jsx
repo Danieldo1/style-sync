@@ -40,7 +40,7 @@ const OutfitPage = () => {
     try {
       const locationFetch = await fetch(`/api/latLong`, { cache: "no-store" });
       const locationData = await locationFetch.json();
-   
+   console.log(locationData.data,'locationData.data');
      setLatLang(locationData.data.location);
   } catch (error) {
     console.error('Error fetching user lat/long:', error);
@@ -50,7 +50,7 @@ const OutfitPage = () => {
   const getUserWeather = async () => {
    
    const latLongString = `${latLang.latitude},${latLang.longitude}`;
-  
+  console.log(latLongString,'latLongString')
     try {
       const response = await fetchWeatherData(latLongString);
       const data = await response;

@@ -11,9 +11,9 @@ export const GET = async (req) => {
     // const data = await latLong.json();
     const locationLat = headers().get("x-vercel-ip-latitude") || 0;
     const locationLong = headers().get("x-vercel-ip-longitude") || 0;
-console.log(locationLat,locationLong,'lat long')
+
     const data = { latitude: locationLat, longitude: locationLong };
-    console.log(data, "dataLocation");
+    
     return Response.json({ data });
   } catch (error) {
     console.error("Error fetching user location:", error);
