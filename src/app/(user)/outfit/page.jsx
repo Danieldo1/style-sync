@@ -1,6 +1,5 @@
 'use client'
 import Heading from '@/components/Heading'
-import { formatLatLong } from '@/lib';
 import React, { useEffect, useState } from 'react'
 import WeatherWidget from '@/components/WeatherWidget'
 import LoadingWeather from '@/components/LoadingWeather'
@@ -47,7 +46,7 @@ const OutfitPage = () => {
 }
   
   const getUserWeather = async () => {
-   // const latLongString = formatLatLong(latLang);
+   
    const latLongString = `${latLang.location.latitude},${latLang.location.longitude}`;
    
     try {

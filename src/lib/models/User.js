@@ -12,16 +12,36 @@ const ItemSchema = new Schema(
 const UserSchema = new Schema(
   {
     email: String,
-    name: String,
+   ref:{
+    type:Schema.Types.ObjectId,
+    ref:'Users'
+   },
     items: [ItemSchema],
    count:{
     type:Number,
     default:22
+   },
+   subscribedOn: {type: Date, default: null},
+   isPro:{
+    type:Boolean,
+    default:false
+   },
+   subscriptionEnds:{
+    type:Date,
    }
   },
   {
     timestamps: true,
   }
 );
+
+UserSchema.pre("save", function (next) {
+  if (this.subscribedOn && this.isModified("subscribedOn")) {
+    this.subscriptionEnds = new Date(
+      this.subscribedOn.getTime() + 30 * 24 * 60 * 60 * 1000
+    );
+  }
+  next();
+});
 
 export default models.User || model('User',UserSchema)

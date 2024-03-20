@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
 import Image from "next/image";
 import CreatableSelect from "react-select/creatable";
@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useForm, Controller } from "react-hook-form";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { myAWSAccessKey, myAWSBucket, myAWSSecretKey } from "@/lib/openai";
+import { fetchUserId } from "@/lib/fetchWeatherData";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -33,6 +34,12 @@ const UploadingForm = () => {
   const router = useRouter();
   const { toast } = useToast();
   const email = session && session.user.email;
+
+useEffect(() => {
+  if (email) {
+    checkSub(email);
+  }
+} , [email]);
 
   const {
     control,
@@ -90,7 +97,10 @@ dataForm.append("file", imageBlob);
 
    };
 
-   
+   const checkSub = async ( email) => {
+    const id = await fetchUserId(email);
+    console.log(id,'ID USER')
+   }
 
   const handleCreate = (inputValue) => {
     setIsLoading(true);

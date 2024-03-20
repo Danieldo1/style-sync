@@ -31,6 +31,8 @@ export async function GET(req) {
      status: 200,
  })
 }
+if(!subscription || !subscription.stripeSubscriptionId){
+
 // TODO chnage dashboard route
 const stripeSession = await stripe.checkout.sessions.create({
   payment_method_types: ["card"],
@@ -63,10 +65,12 @@ const stripeSession = await stripe.checkout.sessions.create({
 return new NextResponse(JSON.stringify({ url: stripeSession.url }), {
   status: 200,
 });
+}
  } catch (error) {
      console.log(error);
      return new NextResponse("Internal Server Error", { status: 500 });
  }
+
 
 
 

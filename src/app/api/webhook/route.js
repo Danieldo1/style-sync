@@ -39,6 +39,7 @@ if(event.type === "checkout.session.completed"){
         stripePriceId: subscription.items.data[0].price.id,
         stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
     })
+    await User.findOneAndUpdate({ _id: session.metadata.userId }, { isPro: true, subscribedOn: new Date() });
 }
 
 if(event.type === "invoice.payment_succeeded"){
