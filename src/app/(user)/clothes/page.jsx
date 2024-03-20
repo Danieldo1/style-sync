@@ -18,7 +18,7 @@ const ClothesPage = () => {
   const email = session && session.user.email;
 
   useEffect(() => {
-    if (email) {
+    if (email !== undefined && email !== null) {
       getUserItems();
     }
   }, [email]);
@@ -28,6 +28,7 @@ const ClothesPage = () => {
     try {
       const response = await fetch(`/api/findItemsUser?email=${email}`, {
         cache: "no-store",
+        method: "GET",
       });
       if (response.ok) {
         const items = await response.json();
