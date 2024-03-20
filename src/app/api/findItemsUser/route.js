@@ -3,13 +3,14 @@ import Item from "@/lib/models/Item";
 import User from "@/lib/models/User";
 import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
+export const revalidate = 5;
 export const GET = async (req) => {
   await connectDB();
   const email = req.url.split("/").pop().split("=").pop();
 
   // Find the user by email
   const user = await User.findOne({ email: email });
-
+console.log(user,'USER')
   if (!user) {
     // If user not found, return an empty array
     return NextResponse.json([]);
