@@ -19,7 +19,7 @@ const UserSchema = new Schema(
     items: [ItemSchema],
    count:{
     type:Number,
-    default:22
+    default:0
    },
    subscribedOn: {type: Date, default: null},
    isPro:{
@@ -43,5 +43,23 @@ UserSchema.pre("save", function (next) {
   }
   next();
 });
+UserSchema.methods.canAddItem = function () {
+  const itemLimit = this.isPro ? Infinity : 20;
+  return this.count < itemLimit;
+};
+
+UserSchema.methods.addItem = async function () {
+  if (this.canAddItem()) {
+    this.count += 1;
+    await this.save();
+    return true;
+  }
+  return false;
+};
+
+UserSchema.methods.removeItem = async function () {
+  this.count = Math.max(0, this.count - 1);
+  await this.save();
+};
 
 export default models.User || model('User',UserSchema)

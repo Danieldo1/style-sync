@@ -54,6 +54,13 @@ const topsOptions = [
   createOption("Off-shoulder top"),
   createOption("Bodysuit"),
   createOption("Sleeveless blouse"),
+  createOption("Dress"),
+  createOption("Sweater"),
+  createOption("Sweatshirt"),
+  createOption("Turtleneck"),
+  createOption("Jumper"),
+  createOption("Blazer"),
+
 ];
 
 const bottomsOptions = [
@@ -72,8 +79,8 @@ const bottomsOptions = [
   createOption("Denim skirt"),
   createOption("High-waisted shorts"),
   createOption("Flared pants"),
-  createOption("Jeggings"),
-  createOption("Paperbag waist pants"),
+  createOption("Pants"),
+
 ];
 
 const shoesOptions = [

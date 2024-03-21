@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useForm, Controller } from "react-hook-form";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { myAWSAccessKey, myAWSBucket, myAWSSecretKey } from "@/lib/openai";
-import { fetchUserId } from "@/lib/fetchWeatherData";
+import { fetchUserId, incrementCount } from "@/lib/fetchWeatherData";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -35,11 +35,11 @@ const UploadingForm = () => {
   const { toast } = useToast();
   const email = session && session.user.email;
 
-useEffect(() => {
-  if (email) {
-    checkSub(email);
-  }
-} , [email]);
+  useEffect(() => {
+    if (email && email.length > 0) {
+      checkUserSubscription();
+    }
+  }, [email]);
 
   const {
     control,
@@ -51,56 +51,64 @@ useEffect(() => {
       category: "",
     },
   });
-   const grabImage = async (event) => {
-     const imageInput = document.querySelector('input[type="file"]');
-     setImgUpload(true);
-     const file = imageInput.files[0];
-     const formData = new FormData();
-     formData.append("image", file);
-     const response = await fetch(
-       `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-       {
-         method: "POST",
-         body: formData,
-       }
-     );
-     const data = await response.json();
-     const UploadedImg = data.data.url;
-     setUploadedImage(UploadedImg);
-     setImgUpload(false);
-     setLoading(true);
-     const res = await fetch("/api/removeBg", {
-       method: "POST",
-       body: JSON.stringify({
-         file: UploadedImg,
-       }),
-       headers: {
-         "Content-Type": "application/json",
-       },
-     });
-     const result = await res.json();
-     setImage(result);
-     setLoading(false);
-     const imageResponse = await fetch(result);
 
-     const imageBlob = await imageResponse.blob();
+  const checkUserSubscription = async () => {
+    const user = await fetchUserId(email);
 
-const dataForm = new FormData();
-dataForm.append("file", imageBlob);
-     const s3Upload = await fetch("/api/uploadAWS", {
-       method: "POST",
-       body: dataForm,
-     })
+    if (!user.isPro && user.count >= 20) {
+      toast({
+        title: "Upgrade to Pro",
+        description: "Upgrade to pro to add more items",
+        variant: "destructive",
+      });
+      return router.push("/dashboard");
+    }
+  };
+  // TODO fix dashboard
+  const grabImage = async (event) => {
+    const imageInput = document.querySelector('input[type="file"]');
+    setImgUpload(true);
+    const file = imageInput.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const data = await response.json();
+    const UploadedImg = data.data.url;
+    setUploadedImage(UploadedImg);
+    setImgUpload(false);
+    setLoading(true);
+    const res = await fetch("/api/removeBg", {
+      method: "POST",
+      body: JSON.stringify({
+        file: UploadedImg,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await res.json();
+    setImage(result);
+    setLoading(false);
+    const imageResponse = await fetch(result);
 
-     const s3UploadJson = await s3Upload.json();
-     setPhotoUrl(s3UploadJson);
+    const imageBlob = await imageResponse.blob();
 
-   };
+    const dataForm = new FormData();
+    dataForm.append("file", imageBlob);
+    const s3Upload = await fetch("/api/uploadAWS", {
+      method: "POST",
+      body: dataForm,
+    });
 
-   const checkSub = async ( email) => {
-    const id = await fetchUserId(email);
-  
-   }
+    const s3UploadJson = await s3Upload.json();
+    setPhotoUrl(s3UploadJson);
+  };
 
   const handleCreate = (inputValue) => {
     setIsLoading(true);
@@ -145,12 +153,14 @@ dataForm.append("file", imageBlob);
       });
 
       if (response.ok) {
+        await incrementCount(email);
         toast({
           title: "Item saved successfully",
           description: "Your item has been saved successfully.",
           variant: "success",
           duration: 3000,
         });
+
         router.back();
       } else {
         toast({

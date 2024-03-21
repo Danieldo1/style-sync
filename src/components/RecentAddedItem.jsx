@@ -6,11 +6,14 @@ import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { FaTrashCan } from "react-icons/fa6";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import { RxRotateCounterClockwise } from "react-icons/rx";
+import { decrementCount } from "@/lib/fetchWeatherData";
 
-const RecentAddedItem = ({ data, loading, onDelete }) => {
+
+const RecentAddedItem = ({ data, loading, onDelete, email }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [items, setItems] = useState(data);
+ 
 
   useEffect(() => {
     setItems(data);
@@ -24,7 +27,7 @@ const RecentAddedItem = ({ data, loading, onDelete }) => {
       });
       if (response.ok) {
         onDelete(itemId);
-        
+        await decrementCount(email)
       } else {
         console.error("Failed to delete the item");
       }

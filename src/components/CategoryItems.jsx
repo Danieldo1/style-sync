@@ -6,8 +6,9 @@ import { groupedOptions } from "@/lib";
 import { FaTrashCan } from "react-icons/fa6";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import LoadingSkeleton from "./LoadingSkeleton";
+import { decrementCount } from "@/lib/fetchWeatherData";
 
-const CategoryItems = ({ data, onDelete, loading }) => {
+const CategoryItems = ({ data, onDelete, loading, email }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -18,6 +19,7 @@ const CategoryItems = ({ data, onDelete, loading }) => {
         method: "DELETE",
       });
       if (response.ok) {
+        await decrementCount(email);
         onDelete(itemId);
      
       } else {

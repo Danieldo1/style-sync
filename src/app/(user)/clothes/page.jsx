@@ -87,10 +87,11 @@ const handleDeleteItem = (deletedItemId) => {
             data={data}
             loading={loading}
             onDelete={handleDeleteItem}
+            email={email}
           />
         </div>
       ) : (
-        <CategoryItems data={data} loading={loading} onDelete={handleDeleteItem}  />
+        <CategoryItems data={data} loading={loading} onDelete={handleDeleteItem} email={email}  />
       )}
     </section>
   );

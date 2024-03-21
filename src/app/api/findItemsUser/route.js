@@ -10,7 +10,6 @@ export const GET = async (req) => {
   const email = decodeURIComponent(
     req.url.split("/").pop().split("=").pop()
   );
-console.log(email,'email')
   // Find the user by email
   const user = await User.findOne({ email: email });
  

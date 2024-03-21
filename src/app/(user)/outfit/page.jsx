@@ -50,7 +50,7 @@ const OutfitPage = () => {
   const getUserWeather = async () => {
    
    const latLongString = `${latLang.latitude},${latLang.longitude}`;
-  console.log(latLongString,'latLongString')
+ 
   if(latLongString){
     try {
       const response = await fetchWeatherData(latLongString);
