@@ -44,3 +44,9 @@ export const decrementCount = async (email) => {
   user.count = user.count - 1;
   await user.save();
 };
+
+export const getCount = async (email) => {
+  await connectDB();
+  const user = await User.findOne({ email: email });
+  return user.count;
+}
