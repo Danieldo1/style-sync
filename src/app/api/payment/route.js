@@ -14,11 +14,12 @@ export async function GET(req) {
  try{
     await connectDB();
     const userEmail = decodeURIComponent(
-      req.url.split("/").pop().split("=").pop()
+    await req.url.split("/").pop().split("=").pop()
     );
  
  const userInfo = await User.findOne({email: userEmail});
  const userId = userInfo._id;
+ 
  if(!userInfo || !userId){
      return new NextResponse("Unauthorized", { status: 401 });
  }
