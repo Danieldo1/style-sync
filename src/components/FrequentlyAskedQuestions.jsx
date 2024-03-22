@@ -49,13 +49,13 @@ const FrequentlyAskedQuestions = () => {
         <AccordionTrigger>How do I cancel my subscription?</AccordionTrigger>
         <AccordionContent>
           You can cancel your subscription at any time by going to your account
-          settings and selecting 'Manage Subscription'.Your Pro membership will
-          be active until the end of the subscription period.
+          settings and selecting &apos;Manage Subscription&apos;.Your Pro
+          membership will be active until the end of the subscription period.
         </AccordionContent>
       </AccordionItem>
 
       <AccordionItem value="faq-6">
-        <AccordionTrigger className='text-start'>
+        <AccordionTrigger className="text-start">
           If I cancel my subscription, will I loose my uploads?{" "}
         </AccordionTrigger>
         <AccordionContent>
