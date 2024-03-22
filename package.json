@@ -13,6 +13,7 @@
     "@aws-sdk/client-s3": "^3.529.1",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
+    "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@stripe/react-stripe-js": "^2.6.2",

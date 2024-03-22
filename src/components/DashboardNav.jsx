@@ -1,22 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 
 import { HiMenuAlt1 } from "react-icons/hi";
 import { PiSignOutBold } from "react-icons/pi";
 import { GiClothes } from "react-icons/gi";
 import { HiOutlineViewfinderCircle } from "react-icons/hi2";
-import { MdFavoriteBorder } from "react-icons/md";
+import { MdFavoriteBorder, MdManageAccounts } from "react-icons/md";
 import { usePathname } from "next/navigation";
 import DarkModeSwitchCustom from "./ThemeToggler";
 import { IoMdClose } from "react-icons/io";
+import ProUser from "./ProUser";
+import { fetchUserId } from "@/lib/fetchWeatherData";
 
 export const DashboardNav = () => {
   const [shown, setShown] = useState(true);
+  const [isPro, setIsPro] = useState(null);
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const email = session && session.user.email;
+  useEffect(() => {
+    if (email) {
+      getUserData();
+    }
+  }, [email]);
+  const getUserData = async () => {
+    const userData = await fetchUserId(email);
+    setIsPro(userData.isPro);
+  };
   const activeLink = (path) => {
     if (path === pathname || pathname.includes(path)) {
       return "bg-muted-foreground text-background";
@@ -55,16 +69,7 @@ export const DashboardNav = () => {
             <p className="text-2xl font-bold text1">StyleSync</p>
           </div>
           <div className="flex flex-col h-full justify-between">
-            <div className="flex flex-col space-y-4 w-full font-semibold ">
-              <Link
-                onClick={toggleSidebar}
-                href="/dashboard"
-                className={`hover:bg-muted-foreground hover:text-background p-2 rounded-md ${activeLink(
-                  "/dashboard"
-                )}`}
-              >
-                <p>Dashboard</p>
-              </Link>
+            <div className="flex flex-col space-y-4 mt-5 w-full font-semibold ">
               <Link
                 onClick={toggleSidebar}
                 href="/clothes"
@@ -73,7 +78,7 @@ export const DashboardNav = () => {
                 )}`}
               >
                 <GiClothes className="w-6 h-6" />
-                <p> My Clothes</p>
+                <p>Closet</p>
               </Link>
               <Link
                 onClick={toggleSidebar}
@@ -83,7 +88,7 @@ export const DashboardNav = () => {
                 )}`}
               >
                 <MdFavoriteBorder className="w-6 h-6" />
-                <p>My Favorites</p>
+                <p>Favorites</p>
               </Link>
               <Link
                 onClick={toggleSidebar}
@@ -93,13 +98,29 @@ export const DashboardNav = () => {
                 )}`}
               >
                 <HiOutlineViewfinderCircle className="w-6 h-6" />
-                <p>Pick An Outfit</p>
+                <p>Find Outfit</p>
+              </Link>
+              <Link
+                onClick={toggleSidebar}
+                href="/dashboard"
+                className={`hover:bg-muted-foreground hover:text-background p-2 rounded-md flex items-center gap-2 ${activeLink(
+                  "/dashboard"
+                )}`}
+              >
+                <MdManageAccounts className="w-6 h-6" />
+                <p>Account</p>
               </Link>
             </div>
-            <div className="flex h-full flex-col justify-end items-center w-full my-2">
+            <div className="flex h-full flex-col justify-end items-center w-full my-2 mb-10 md:mb-2">
               <div className="mb-5">
                 <DarkModeSwitchCustom />
               </div>
+              {isPro === false && (
+                <div className="w-full mb-5 ">
+                  <ProUser email={email} />
+                </div>
+              )}
+
               <Button
                 variant="destructive"
                 onClick={() => signOut({ callbackUrl: "/" })}
