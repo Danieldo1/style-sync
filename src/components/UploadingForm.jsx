@@ -10,8 +10,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useForm, Controller } from "react-hook-form";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { myAWSAccessKey, myAWSBucket, myAWSSecretKey } from "@/lib/openai";
+import { CgSpinner } from "react-icons/cg";
 import { fetchUserId, incrementCount } from "@/lib/fetchWeatherData";
 
 const UploadingForm = () => {
@@ -19,6 +18,7 @@ const UploadingForm = () => {
   const [loading, setLoading] = useState(false);
   const [imgUpload, setImgUpload] = useState(false);
   const [uploadedImage, setUploadedImage] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState(colors);
@@ -52,6 +52,7 @@ const UploadingForm = () => {
     },
   });
 
+  // TODO fix dashboard
   const checkUserSubscription = async () => {
     const user = await fetchUserId(email);
 
@@ -64,72 +65,50 @@ const UploadingForm = () => {
       return router.push("/dashboard");
     }
   };
-  // TODO fix dashboard
-  const grabImage = async (event) => {
-    try{
+   const grabImage = async (event) => {
+     const imageInput = document.querySelector('input[type="file"]');
+     setImgUpload(true);
+     const file = imageInput.files[0];
+     const formData = new FormData();
+     formData.append("image", file);
+     const response = await fetch(
+       `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+       {
+         method: "POST",
+         body: formData,
+       }
+     );
+     const data = await response.json();
+     const UploadedImg = data.data.url;
+     setUploadedImage(UploadedImg);
+     setImgUpload(false);
+     setLoading(true);
+     const res = await fetch("/api/removeBg", {
+       method: "POST",
+       body: JSON.stringify({
+         file: UploadedImg,
+       }),
+       headers: {
+         "Content-Type": "application/json",
+       },
+     });
+     const result = await res.json();
+     setImage(result);
+     setLoading(false);
+     const imageResponse = await fetch(result);
 
-      const imageInput = document.querySelector('input[type="file"]');
-      setImgUpload(true);
-      const file = imageInput.files[0];
-      const formData = new FormData();
-      formData.append("image", file);
-      const response = await fetch(
-        `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const data = await response.json();
-      const UploadedImg = data.data.url;
-      setUploadedImage(UploadedImg);
-      setImgUpload(false);
-      setLoading(true);
-      const res = await fetch("/api/removeBg", {
-        method: "POST",
-        body: JSON.stringify({
-          file: UploadedImg,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      
-      if(!res.ok){
-        toast({
-          title: "Something went wrong",
-          description: "Please try again",
-          variant: "destructive",
-        })
-      }
-      if(res.ok){
-        const result = await res.json();
-        setImage(result);
-        setLoading(false);
-        const imageResponse = await fetch(result);
-    
-        const imageBlob = await imageResponse.blob();
-    
-        const dataForm = new FormData();
-        dataForm.append("file", imageBlob);
-        const s3Upload = await fetch("/api/uploadAWS", {
-          method: "POST",
-          body: dataForm,
-        });
-    
-        const s3UploadJson = await s3Upload.json();
-        setPhotoUrl(s3UploadJson);
-  
-      }
-    } catch (error) {
-      toast({
-        title: "Something went wrong",
-        description: "Please try again",
-        variant: "destructive",
-      })
+     const imageBlob = await imageResponse.blob();
 
-    }
-  };
+     const dataForm = new FormData();
+     dataForm.append("file", imageBlob);
+     const s3Upload = await fetch("/api/uploadAWS", {
+       method: "POST",
+       body: dataForm,
+     });
+
+     const s3UploadJson = await s3Upload.json();
+     setPhotoUrl(s3UploadJson);
+   };
 
   const handleCreate = (inputValue) => {
     setIsLoading(true);
@@ -155,7 +134,7 @@ const UploadingForm = () => {
   };
   const onSubmit = async (event) => {
     // event.preventDefault();
-
+    setSaving(true);
     const formData = {
       category: category.value,
       colors: Array.isArray(value) ? value.map((opt) => opt.value) : [],
@@ -175,6 +154,7 @@ const UploadingForm = () => {
 
       if (response.ok) {
         await incrementCount(email);
+        setSaving(false);
         toast({
           title: "Item saved successfully",
           description: "Your item has been saved successfully.",
@@ -190,6 +170,7 @@ const UploadingForm = () => {
           variant: "destructive",
           duration: 3000,
         });
+        setSaving(false);
         console.error("Failed to save the item");
         router.refresh();
       }
@@ -384,7 +365,11 @@ const UploadingForm = () => {
               )}
             </div>
             <Button type="submit" className="w-full">
-              Add Item
+              {saving ? (
+                <div className="flex items-center justify-center gap-2">
+                  <CgSpinner className="animate-spin w-8 h-8" />
+                  </div>
+              ) : "Add Item"}
             </Button>
           </form>
         </div>
