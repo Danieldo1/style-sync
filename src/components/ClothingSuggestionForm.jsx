@@ -7,12 +7,14 @@ import { Button } from "./ui/button";
 import { TiHeart } from "react-icons/ti";
 import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
-
+import { CgSpinner } from "react-icons/cg";
 const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [eventType, setEventType] = useState("");
   const [mood, setMood] = useState("");
   const [suggestions, setSuggestions] = useState("");
   const [outfitsDisplay, setOutfitsDisplay] = useState(null);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [loadingRandomize, setLoadingRandomize] = useState(false);
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -26,14 +28,17 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const { data: session } = useSession();
   const email = session && session.user.email;
   const { toast } = useToast();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+
 const event = watch("eventType");
 const feeling = watch("mood");
+
   const clothingDescriptions = clothes.map((item) => {
     let description = `${item.colors.join(" with ")} ${item.category}`;
     if (item.pattern) {
@@ -45,7 +50,7 @@ const feeling = watch("mood");
   });
 
   const onSubmit = async () => {
-   
+   setLoadingSuggestions(true);
     const suggestions = await generateClothingSuggestions(
       event,
       feeling,
@@ -57,9 +62,11 @@ const feeling = watch("mood");
     );
 
     setSuggestions(suggestions);
+    setLoadingSuggestions(false);
   };
 
   const handleRandomize = async () => {
+    setLoadingRandomize(true);
     const suggestions = await generateClothingSuggestions(
       event,
       feeling,
@@ -71,6 +78,7 @@ const feeling = watch("mood");
     );
 
     setSuggestions(suggestions);
+    setLoadingRandomize(false);
   };
 
   const handleLikeOutfit = (index, outfitItems, email) => {
@@ -203,7 +211,7 @@ const feeling = watch("mood");
             I&apos;m going to
             <input
               type="text"
-            autoComplete="off"
+              autoComplete="off"
               {...register("eventType", { required: true })}
               className="bg-transparent h-4 w-44 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
@@ -213,7 +221,7 @@ const feeling = watch("mood");
               </p>
             )}
           </label>
-           
+
           {errors.eventType && (
             <span className="text-red-500 text-sm ml-36 lg:hidden ">
               This field is required
@@ -225,7 +233,6 @@ const feeling = watch("mood");
             <input
               type="text"
               autoComplete="off"
-              
               {...register("mood", { required: true })}
               className="bg-transparent h-4 w-48 md:w-60 border-b border-foreground focus:outline-none mx-2"
             />
@@ -246,7 +253,13 @@ const feeling = watch("mood");
           type="submit"
           className="text-xl font-semibold max-w-xl w-full mx-auto"
         >
-          Get Suggestions
+          {loadingSuggestions ? (
+            <div className="flex items-center justify-center gap-2">
+              <CgSpinner className="animate-spin w-8 h-8" />
+            </div>
+          ) : (
+            "Get Suggestions"
+          )}
         </Button>
       </form>
 
@@ -260,7 +273,13 @@ const feeling = watch("mood");
           onClick={handleRandomize}
           className="text-xl font-semibold mt-5 max-w-xl w-full mx-auto"
         >
-          Randomize
+          {loadingRandomize ? (
+            <div className="flex items-center justify-center gap-2">
+              <CgSpinner className="animate-spin w-8 h-8" />
+            </div>
+          ) : (
+            "Randomize"
+          )}
         </Button>
       </div>
       {outfitsDisplay}
