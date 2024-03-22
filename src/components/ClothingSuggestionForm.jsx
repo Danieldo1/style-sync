@@ -8,6 +8,8 @@ import { TiHeart } from "react-icons/ti";
 import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
+import LoadingFav from "./LoadingFav";
+
 const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [eventType, setEventType] = useState("");
   const [mood, setMood] = useState("");
@@ -15,6 +17,7 @@ const ClothingSuggestionForm = ({ clothes, weather }) => {
   const [outfitsDisplay, setOutfitsDisplay] = useState(null);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [loadingRandomize, setLoadingRandomize] = useState(false);
+  const [responseLoading , setResponseLoading] = useState(false);
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -51,6 +54,7 @@ const feeling = watch("mood");
 
   const onSubmit = async () => {
    setLoadingSuggestions(true);
+   setResponseLoading(true);
     const suggestions = await generateClothingSuggestions(
       event,
       feeling,
@@ -62,11 +66,13 @@ const feeling = watch("mood");
     );
 
     setSuggestions(suggestions);
+    setResponseLoading(false);
     setLoadingSuggestions(false);
   };
 
   const handleRandomize = async () => {
     setLoadingRandomize(true);
+     setResponseLoading(true);
     const suggestions = await generateClothingSuggestions(
       event,
       feeling,
@@ -78,6 +84,7 @@ const feeling = watch("mood");
     );
 
     setSuggestions(suggestions);
+    setResponseLoading(false);
     setLoadingRandomize(false);
   };
 
@@ -143,6 +150,7 @@ const feeling = watch("mood");
 
       return (
         <div className="flex flex-col -gap-5 mt-5 max-w-3xl mx-auto">
+          
           {groupedOutfits.length > 0 &&
             groupedOutfits.map((outfit, index) => {
               const firstQuoteIndex = outfit.description.indexOf('"') + 1;
@@ -251,7 +259,12 @@ const feeling = watch("mood");
 
         <Button
           type="submit"
-          className="text-xl font-semibold max-w-xl w-full mx-auto"
+          disabled={loadingRandomize || loadingSuggestions}
+          className={`text-xl font-semibold mt-5 max-w-xl w-full mx-auto ${
+            loadingRandomize || loadingSuggestions === true
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`}
         >
           {loadingSuggestions ? (
             <div className="flex items-center justify-center gap-2">
@@ -271,7 +284,12 @@ const feeling = watch("mood");
         </div>
         <Button
           onClick={handleRandomize}
-          className="text-xl font-semibold mt-5 max-w-xl w-full mx-auto"
+          disabled={loadingRandomize || loadingSuggestions}
+          className={`text-xl font-semibold mt-5 max-w-xl w-full mx-auto ${
+            loadingRandomize || loadingSuggestions === true
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`}
         >
           {loadingRandomize ? (
             <div className="flex items-center justify-center gap-2">
@@ -282,6 +300,10 @@ const feeling = watch("mood");
           )}
         </Button>
       </div>
+      {responseLoading &&
+        Array(8)
+          .fill()
+          .map((_, index) => <LoadingFav key={index} />)}
       {outfitsDisplay}
     </div>
   );
