@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
+
 
 export const GET = async (req) => {
   try {
