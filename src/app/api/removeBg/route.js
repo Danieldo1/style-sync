@@ -1,4 +1,4 @@
-"use server"; 
+
 import Replicate from "replicate";
 import { NextResponse } from "next/server";
 
