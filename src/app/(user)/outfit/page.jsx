@@ -91,7 +91,7 @@ const OutfitPage = () => {
   };
 
   const renderClothingSuggestionForm = () => {
-    if (count <= 10) {
+    if (count < 10) {
       return (
         <div className=" max-w-3xl mx-auto h-[60vh] flex flex-col items-center mt-20">
           <p className="text-2xl font-semibold">Please add more clothes</p>
@@ -99,7 +99,7 @@ const OutfitPage = () => {
           <p className="text-lg font-base">Please add {10 - count} more</p>
           <img src="/empty.png" alt="Clothes" className="object-cover " />
           <Link
-            href="/clothes"
+            href="/clothes/new"
             className="bg-secondary my-5 p-2 px-3 rounded-md border-primary border-[1px] hover:border-secondary hover:bg-primary text-primary hover:text-secondary transition-all duration-300 ease-in"
           >
             <p className="text-center text-2xl font-semibold">Add Clothes</p>

@@ -4,6 +4,8 @@ import SessionWrapper from "../../components/SessionWrapper";
 import { Josefin_Sans, Prompt } from "next/font/google";
 import { DashboardNav } from "@/components/DashboardNav";
 import { Toaster } from "@/components/ui/toaster";
+import Providers from "../providers";
+
 
 const josefsans = Josefin_Sans({
   style: ["normal", "italic"],
@@ -37,12 +39,16 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
+            
             <main className="flex h-screen ">
+              <Providers >
               <DashboardNav />
               <div className="w-full ml-10 mr-4 my-1 overflow-auto scrollbar-hide">
                 {children}
               </div>
+              </Providers>
             </main>
+            
             <Toaster />
           </ThemeProvider>
         </body>

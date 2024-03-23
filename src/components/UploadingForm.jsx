@@ -12,6 +12,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useForm, Controller } from "react-hook-form";
 import { CgSpinner } from "react-icons/cg";
 import { fetchUserId, incrementCount } from "@/lib/fetchWeatherData";
+import {useAtom} from 'jotai'
+import { countAtom } from "@/lib/atomStore";
 
 const UploadingForm = () => {
   const [image, setImage] = useState("");
@@ -28,6 +30,7 @@ const UploadingForm = () => {
   const [value, setValue] = useState();
 
   const [isToggled, setIsToggled] = useState(false);
+   const [count, setCount] = useAtom(countAtom);
   const toggleSwitch = () => setIsToggled(!isToggled);
 
   const { data: session } = useSession();
@@ -65,50 +68,50 @@ const UploadingForm = () => {
       return router.push("/dashboard");
     }
   };
-   const grabImage = async (event) => {
-     const imageInput = document.querySelector('input[type="file"]');
-     setImgUpload(true);
-     const file = imageInput.files[0];
-     const formData = new FormData();
-     formData.append("image", file);
-     const response = await fetch(
-       `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-       {
-         method: "POST",
-         body: formData,
-       }
-     );
-     const data = await response.json();
-     const UploadedImg = data.data.url;
-     setUploadedImage(UploadedImg);
-     setImgUpload(false);
-     setLoading(true);
-     const res = await fetch("/api/removeBg", {
-       method: "POST",
-       body: JSON.stringify({
-         file: UploadedImg,
-       }),
-       headers: {
-         "Content-Type": "application/json",
-       },
-     });
-     const result = await res.json();
-     setImage(result);
-     setLoading(false);
-     const imageResponse = await fetch(result);
+  const grabImage = async (event) => {
+    const imageInput = document.querySelector('input[type="file"]');
+    setImgUpload(true);
+    const file = imageInput.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?expiration=60000&key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const data = await response.json();
+    const UploadedImg = data.data.url;
+    setUploadedImage(UploadedImg);
+    setImgUpload(false);
+    setLoading(true);
+    const res = await fetch("/api/removeBg", {
+      method: "POST",
+      body: JSON.stringify({
+        file: UploadedImg,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await res.json();
+    setImage(result);
+    setLoading(false);
+    const imageResponse = await fetch(result);
 
-     const imageBlob = await imageResponse.blob();
+    const imageBlob = await imageResponse.blob();
 
-     const dataForm = new FormData();
-     dataForm.append("file", imageBlob);
-     const s3Upload = await fetch("/api/uploadAWS", {
-       method: "POST",
-       body: dataForm,
-     });
+    const dataForm = new FormData();
+    dataForm.append("file", imageBlob);
+    const s3Upload = await fetch("/api/uploadAWS", {
+      method: "POST",
+      body: dataForm,
+    });
 
-     const s3UploadJson = await s3Upload.json();
-     setPhotoUrl(s3UploadJson);
-   };
+    const s3UploadJson = await s3Upload.json();
+    setPhotoUrl(s3UploadJson);
+  };
 
   const handleCreate = (inputValue) => {
     setIsLoading(true);
@@ -154,6 +157,7 @@ const UploadingForm = () => {
 
       if (response.ok) {
         await incrementCount(email);
+        setCount(count + 1);
         setSaving(false);
         toast({
           title: "Item saved successfully",
@@ -175,6 +179,12 @@ const UploadingForm = () => {
         router.refresh();
       }
     } catch (error) {
+      toast({
+        title: "Failed to save the item",
+        description: "Please try again later.",
+        variant: "destructive",
+        duration: 3000,
+      });
       console.error("Error submitting the form", error);
     }
   };
@@ -368,8 +378,10 @@ const UploadingForm = () => {
               {saving ? (
                 <div className="flex items-center justify-center gap-2">
                   <CgSpinner className="animate-spin w-8 h-8" />
-                  </div>
-              ) : "Add Item"}
+                </div>
+              ) : (
+                "Add Item"
+              )}
             </Button>
           </form>
         </div>

@@ -19,17 +19,22 @@ import { fetchUserId } from "@/lib/fetchWeatherData";
 export const DashboardNav = () => {
   const [shown, setShown] = useState(true);
   const [isPro, setIsPro] = useState(null);
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const { data: session } = useSession();
+
   const email = session && session.user.email;
   useEffect(() => {
+   
     if (email) {
       getUserData();
-    }
+    } 
   }, [email]);
   const getUserData = async () => {
+    
     const userData = await fetchUserId(email);
     setIsPro(userData.isPro);
+   setLoading(false);
   };
   const activeLink = (path) => {
     if (path === pathname || pathname.includes(path)) {
@@ -117,7 +122,7 @@ export const DashboardNav = () => {
               </div>
               {isPro === false && (
                 <div className="w-full mb-5 ">
-                  <ProUser email={email} />
+                  <ProUser email={email} loading={loading} />
                 </div>
               )}
 

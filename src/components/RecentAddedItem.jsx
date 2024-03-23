@@ -7,12 +7,15 @@ import { FaTrashCan } from "react-icons/fa6";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import { RxRotateCounterClockwise } from "react-icons/rx";
 import { decrementCount } from "@/lib/fetchWeatherData";
+import {useAtom} from 'jotai'
+import { countAtom,incrementAtomCount,decrementAtomCount } from "@/lib/atomStore";
 
 
 const RecentAddedItem = ({ data, loading, onDelete, email }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [items, setItems] = useState(data);
+ const [count, setCount] = useAtom(countAtom);
  
 
   useEffect(() => {
@@ -27,7 +30,8 @@ const RecentAddedItem = ({ data, loading, onDelete, email }) => {
       });
       if (response.ok) {
         onDelete(itemId);
-        await decrementCount(email)
+        await decrementCount(email);
+        setCount(count - 1);
       } else {
         console.error("Failed to delete the item");
       }

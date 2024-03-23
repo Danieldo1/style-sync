@@ -7,10 +7,13 @@ import { FaTrashCan } from "react-icons/fa6";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import LoadingSkeleton from "./LoadingSkeleton";
 import { decrementCount } from "@/lib/fetchWeatherData";
+import { useAtom } from 'jotai'
+import { countAtom,incrementAtomCount,decrementAtomCount } from "@/lib/atomStore";
 
 const CategoryItems = ({ data, onDelete, loading, email }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const [count, setCount]= useAtom(countAtom);
 
   const handleDelete = async (itemId) => {
     setIsDialogOpen(false);
@@ -20,6 +23,7 @@ const CategoryItems = ({ data, onDelete, loading, email }) => {
       });
       if (response.ok) {
         await decrementCount(email);
+        setCount(count - 1);
         onDelete(itemId);
      
       } else {
