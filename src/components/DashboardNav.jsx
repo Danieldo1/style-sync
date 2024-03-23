@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 import { HiMenuAlt1 } from "react-icons/hi";
 import { PiSignOutBold } from "react-icons/pi";
@@ -15,6 +16,7 @@ import DarkModeSwitchCustom from "./ThemeToggler";
 import { IoMdClose } from "react-icons/io";
 import ProUser from "./ProUser";
 import { fetchUserId } from "@/lib/fetchWeatherData";
+import {useTheme} from "next-themes";
 
 export const DashboardNav = () => {
   const [shown, setShown] = useState(true);
@@ -22,7 +24,7 @@ export const DashboardNav = () => {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const { data: session } = useSession();
-
+const { theme } = useTheme();
   const email = session && session.user.email;
   useEffect(() => {
    
@@ -70,8 +72,15 @@ export const DashboardNav = () => {
             />
           </button>
 
-          <div className="p-3">
-            <p className="text-2xl font-bold text1">StyleSync</p>
+          <div className="p-3 flex flex-row items-center justify-center border-b">
+            <Image
+              src="/logo2.png"
+              alt="Logo"
+              width={50}
+              height={50}
+              className={theme === "dark" ? "" : "invert"}
+            />
+            <p className="text-3xl font-bold text1 -mb-3">tyleSync</p>
           </div>
           <div className="flex flex-col h-full justify-between">
             <div className="flex flex-col space-y-4 mt-5 w-full font-semibold ">
