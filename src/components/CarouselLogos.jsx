@@ -35,13 +35,14 @@ const images = [
 const settings = {
   dots: false,
   infinite: true,
-  speed: 1500,
+  speed: 2000,
   slidesToShow: 6,
   slidesToScroll: 1,
   swipeToSlide: true,
   autoplay: true,
-  autoplaySpeed: 50,
-  pauseOnHover: true,
+  autoplaySpeed: 10,
+  pauseOnHover: false,
+  cssEase: "linear",
 };
 
 const CarouselLogos = () => {
