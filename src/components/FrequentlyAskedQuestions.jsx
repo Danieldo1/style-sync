@@ -18,7 +18,7 @@ const FrequentlyAskedQuestions = () => {
       </AccordionItem>
 
       <AccordionItem value="faq-2">
-        <AccordionTrigger>
+        <AccordionTrigger className="text-start">
           Can I change my subscription plan later?
         </AccordionTrigger>
         <AccordionContent>
@@ -36,7 +36,7 @@ const FrequentlyAskedQuestions = () => {
       </AccordionItem>
 
       <AccordionItem value="faq-4">
-        <AccordionTrigger>
+        <AccordionTrigger className="text-start">
           What is included in the free subscription plan?
         </AccordionTrigger>
         <AccordionContent>

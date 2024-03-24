@@ -31,7 +31,7 @@ const router = useRouter()
             {session ? (
               <>
                 <li>
-                  <Link href="/dashboard">
+                  <Link href="/clothes">
                     <div className="w-[30px] h-[30px] relative ">
                       <Image
                         src={session.user?.image}

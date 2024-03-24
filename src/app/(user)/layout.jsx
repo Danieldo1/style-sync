@@ -35,9 +35,9 @@ export default function RootLayout({ children }) {
         <body className={`${josefsans.variable} ${prompt.className}`}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+            defaultTheme="light"
+            enableSystem={false}
+            
           >
             
             <main className="flex h-screen ">
