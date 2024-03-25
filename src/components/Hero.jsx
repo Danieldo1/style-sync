@@ -22,6 +22,7 @@ const Hero = () => {
         </div>
         <p>Trusted by +1400 happy users ★★★★★</p>
         <div className="w-full flex justify-center rounded-lg relative h-full mt-5 -mb-28 md:mb-0">
+            
           <Image
             src="/hero.png"
             alt="hero"

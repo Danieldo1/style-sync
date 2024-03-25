@@ -1,5 +1,6 @@
 import Companies from "@/components/Companies";
 import Hero from "@/components/Hero";
+import Showcase from "@/components/Showcase";
 import Usage from "@/components/Usage";
 
 
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero />
       <Companies />
       <Usage />
+      <Showcase />
     </main>
   );
 }
