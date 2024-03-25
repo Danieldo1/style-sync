@@ -113,9 +113,10 @@ const RecentAddedItem = ({ data, loading, onDelete, email }) => {
                   style={{ transform: `rotate(${item.rotationDegree}deg)` }}
                 >
                   <Image
-                    src={decodeURIComponent(item.photoUrl)}
+                    src={item.photoUrl}
                     alt={item.category}
                     fill
+                    unoptimized={true}
                     className={`object-cover mb-2 `}
                   />
                 </div>

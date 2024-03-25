@@ -8,14 +8,9 @@ async function generateUniqueShortId(length) {
   let shortId;
 
   while (!isUnique) {
-    // Generate a short ID
     const randomBytes = crypto.randomBytes(Math.ceil(length / 2));
     shortId = randomBytes.toString("hex").slice(0, length);
-
-    // Check if the generated ID already exists in the database
     const existingItem = await Item.findOne({ _id: shortId });
-
-    // If the ID doesn't exist, set isUnique to true and exit the loop
     if (!existingItem) {
       isUnique = true;
     }
