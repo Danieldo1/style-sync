@@ -22,9 +22,11 @@ const Hero = () => {
         </div>
         <p>Trusted by +1400 happy users ★★★★★</p>
         <div className="w-full flex justify-center rounded-lg relative h-full mt-5 -mb-28 md:mb-0">
-            
+          <div className="absolute w-40 h-40 z-10 right-[11rem] lg:right-[20rem] xl:right-[30rem] -top-[7rem] -rotate-[110deg] hidden md:block">
+            <img src="/arrow.svg" alt="arrow" className="w-full h-full " />
+          </div>
           <Image
-            src="/hero.png"
+            src="/hero1.png"
             alt="hero"
             fill
             priority={true}

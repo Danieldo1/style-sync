@@ -20,7 +20,7 @@ const Usage = () => {
             Our smart bot will crop the background out and you tag the items by
             category or colors
           </p>
-          <div className="absolute w-40 h-40 z-10 -right-[6rem] -top-[1rem] rotate-180 hidden md:block ">
+          <div className="absolute w-40 h-40 z-[5px] -right-[6rem] -top-[1rem] rotate-180 hidden md:block ">
             <img
               src="/arrow.svg"
               alt="arrow"
@@ -38,7 +38,7 @@ const Usage = () => {
             We can help you create your perfect outfit by getting your local
             weather and where you are going
           </p>
-          <div className="absolute w-40 h-40 z-10 -right-[6rem] top-[2rem] hidden md:block">
+          <div className="absolute w-40 h-40 z-[5px] -right-[6rem] top-[2rem] hidden md:block">
             <img src="/arrow.svg" alt="arrow" className="w-full h-full " />
           </div>
         </div>
