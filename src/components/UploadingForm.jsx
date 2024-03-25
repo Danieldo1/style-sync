@@ -33,6 +33,11 @@ const UploadingForm = () => {
    const [count, setCount] = useAtom(countAtom);
   const toggleSwitch = () => setIsToggled(!isToggled);
   
+  const { data: session } = useSession();
+  const router = useRouter();
+  const { toast } = useToast();
+  const email = session && session.user.email;
+  
   useEffect(() => {
     if (email && email.length > 0) {
       checkUserSubscription();
@@ -41,10 +46,6 @@ const UploadingForm = () => {
   }, [email]);
   
   
-    const { data: session } = useSession();
-    const router = useRouter();
-    const { toast } = useToast();
-    const email = session && session.user.email;
 
   const {
     control,
