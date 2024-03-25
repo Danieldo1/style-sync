@@ -4,10 +4,10 @@ import { Button } from "./ui/button";
 
 const Hero = () => {
   return (
-    <section className="w-full h-[80vh] bg-gray-200">
+    <section className="w-full h-[80vh] bg-border">
       <div className="flex flex-col items-center  justify-center h-full ">
-        <div className="mb-3">
-          <h1 className="text-3xl md:text-5xl font-bold text-center text1">
+        <div className="mb-3 mt-3">
+          <h1 className="text-3xl md:text-5xl  font-bold text-center text1">
             Create your perfect outfit in seconds.
           </h1>
           <p className="text-lg text-center tracking-wide ">
@@ -15,13 +15,21 @@ const Hero = () => {
             clothes, suggested by StyleSync.{" "}
           </p>
         </div>
-        <div className="mb-3">
-          <Button className="mt-3">Get Started</Button>
-          or
-          <Button className="mt-3">Login</Button>
+        <div className="mb-3 w-full flex justify-center items-center">
+          <Button className="mr-5">Get Started</Button>
+          <p>or</p>
+          <Button
+            variant="outline"
+            className="ml-5 z-20 cursor-pointer hover:bg-gray-400 hover:text-white transition-all delay-100 ease-in-out"
+          >
+            Login
+          </Button>
         </div>
-        <p>Trusted by +1400 happy users ★★★★★</p>
-        <div className="w-full flex justify-center rounded-lg relative h-full mt-5 -mb-28 md:mb-0">
+        <p>
+          Trusted by +1400 happy users{" "}
+          <span className="text-yellow-500">★★★★★</span>
+        </p>
+        <div className="w-full flex justify-center rounded-lg relative h-full mt-2 md:mb-0">
           <div className="absolute w-40 h-40 z-10 right-[11rem] lg:right-[20rem] xl:right-[30rem] -top-[7rem] -rotate-[110deg] hidden md:block">
             <img src="/arrow.svg" alt="arrow" className="w-full h-full " />
           </div>

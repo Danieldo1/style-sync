@@ -19,7 +19,7 @@ const ImageBtn = () => {
         {Object.entries(images).map(([key, imagePath]) => (
           <button
             className={`p-2 md:p-3 border-blue-300 border-[1px] rounded-lg mx-1 md:mx-3  ${
-              isSelected(imagePath) ? "bg-blue-500 text-white" : "bg-white"
+              isSelected(imagePath) ? "bg-blue-500 text-white" : "bg-white hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out"
             }`}
             onClick={() => setCurrentImage(imagePath)}
             key={key}
@@ -28,7 +28,7 @@ const ImageBtn = () => {
           </button>
         ))}
       </div>
-      <div className="flex flex-row w-[85%] md:w-[65%]  justify-center items-center mx-auto">
+      <div className="flex flex-row w-[98%] md:w-[65%]  justify-center items-center mx-auto">
         <img src={currentImage} alt="display" className="w-full" />
       </div>
     </div>

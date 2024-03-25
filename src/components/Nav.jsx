@@ -13,7 +13,7 @@ const Nav = () => {
 
 const router = useRouter()
   return (
-    <header className="sticky top-0 z-20 bg-muted-foreground/30 py-4 backdrop-filter backdrop-blur-lg border-b border-gray-100">
+    <header className="sticky top-0 z-40 bg-muted-foreground/30 py-4 backdrop-filter backdrop-blur-lg border-b border-gray-100">
       <div className="flex items-center container mx-auto justify-between    ">
         <div className="flex flex-row items-center justify-center ">
           <Image

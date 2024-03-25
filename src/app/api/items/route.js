@@ -26,6 +26,9 @@ async function generateUniqueShortId(length) {
 export const dynamic = "force-dynamic";
 export const POST = async (req) => {
   const { category,colors,pattern,photoUrl,email } = await req.json();
+  console.log(photoUrl,"PHOTO URL SENDING TO MONGO");
+  const link = decodeURIComponent(photoUrl);
+  console.log(link,"LINK PERHAPS FIXED");
   await connectDB();
   try {
     const shortId = await generateUniqueShortId(6);

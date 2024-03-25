@@ -13,20 +13,20 @@ const Showcase = () => {
         <h4 className="text-lg font-semibold text-muted-foreground ">
           The top rated outfit tool
         </h4>
-        <div className="flex flex-row items-center space-y-5 -mt-10">
-          <div>
+        <div className="flex flex-row items-center space-y-5 -mt-8">
+          <div className="">
             <img
               src="/googlerev.png"
               alt="google"
-              className="w-36 h-36 "
+              className="w-20 h-20 "
             />
-            <p className="text-center font-bold -mt-10">5.0 (218)</p>
+            <p className="text-center font-bold -mt-5 ">5.0 (218)</p>
           </div>
           <div>
             <img
               src="/badge.png"
               alt="badge"
-              className="w-36 h-36"
+              className="w-20 h-20"
             />
           </div>
         </div>

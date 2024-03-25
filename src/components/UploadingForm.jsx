@@ -110,6 +110,7 @@ const UploadingForm = () => {
     });
 
     const s3UploadJson = await s3Upload.json();
+    console.log(s3UploadJson, "LINK FROM UPLOADING TO AWS");
     setPhotoUrl(s3UploadJson);
   };
 
