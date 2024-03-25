@@ -113,7 +113,7 @@ const RecentAddedItem = ({ data, loading, onDelete, email }) => {
                   style={{ transform: `rotate(${item.rotationDegree}deg)` }}
                 >
                   <Image
-                    src={item.photoUrl}
+                    src={decodeURIComponent(item.photoUrl)}
                     alt={item.category}
                     fill
                     className={`object-cover mb-2 `}
@@ -124,7 +124,9 @@ const RecentAddedItem = ({ data, loading, onDelete, email }) => {
                   className="absolute bottom-16 right-2 p-2 z-[8] group hover:bg-slate-500 rounded-md transition-all duration-300 ease-in "
                 >
                   <div className="flex items-center gap-2">
-                    <p className="md:hidden block  md:group-hover:block">Rotate</p>
+                    <p className="md:hidden block  md:group-hover:block">
+                      Rotate
+                    </p>
                     <RxRotateCounterClockwise className="font-bold" />
                   </div>
                 </button>
