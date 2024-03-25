@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// https://dribbble.com/shots/23851706-Talkee-SaaS-Product-Website-Design
 
 const images = [
     "/comp/adidas.svg",
@@ -51,7 +52,7 @@ const CarouselLogos = () => {
    <Slider {...settings}>
      {images.map((image, index) => (
        <div key={index}>
-         <img src={image} alt={`Slide ${index + 1}`} className="w-20 h-20" />
+         <img src={image} alt={`Slide ${index + 1}`} className="w-20 h-20 mx-5 p-2 md:p-0 grayscale" />
        </div>
      ))}
    </Slider>
