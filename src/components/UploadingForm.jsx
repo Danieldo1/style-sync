@@ -32,7 +32,7 @@ const UploadingForm = () => {
   const [isToggled, setIsToggled] = useState(false);
    const [count, setCount] = useAtom(countAtom);
   const toggleSwitch = () => setIsToggled(!isToggled);
-  
+
   const { data: session } = useSession();
   const router = useRouter();
   const { toast } = useToast();
@@ -113,7 +113,7 @@ const UploadingForm = () => {
     });
 
     const s3UploadJson = await s3Upload.json();
-    console.log(s3UploadJson, "LINK FROM UPLOADING TO AWS");
+   
     setPhotoUrl(s3UploadJson);
   };
 
