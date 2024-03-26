@@ -26,7 +26,7 @@ export async function POST(req){
       Key: newFile,
       Body: body,
       ContentType: file.type,
-      ACL: "bucket-owner-full-control",
+      ACL: "public-read",
     }))
     return Response.json(`https://${myAWSBucket}.s3.amazonaws.com/${newFile}`);
     }
