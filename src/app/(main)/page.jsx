@@ -2,6 +2,7 @@ import BentoBox from "@/components/BentoBox";
 import Companies from "@/components/Companies";
 import DeepDive from "@/components/DeepDive";
 import Hero from "@/components/Hero";
+import Review from "@/components/Review";
 import Showcase from "@/components/Showcase";
 import Usage from "@/components/Usage";
 
@@ -18,6 +19,7 @@ export default function Home() {
       <Showcase />
       <DeepDive />
       <BentoBox />
+      <Review />
     </main>
   );
 }
