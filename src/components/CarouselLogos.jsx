@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// https://dribbble.com/shots/23851706-Talkee-SaaS-Product-Website-Design
+
 
 const images = [
     "/comp/adidas.svg",

@@ -5,6 +5,8 @@ import Showcase from "@/components/Showcase";
 import Usage from "@/components/Usage";
 
 
+// https://dribbble.com/shots/23851706-Talkee-SaaS-Product-Website-Design
+
 export default function Home() {
   return (
     <main className="">
