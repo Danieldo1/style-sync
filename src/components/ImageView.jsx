@@ -18,7 +18,7 @@ const ImageView = () => {
       return images[imageKey] === selectedImage;
     };
   return (
-    <div>
+    <div className='pb-5'>
       <div className="max-w-85% px-5 md:max-w-[70%] lg:max-w-[60%] xl:max-w-[55%] 2xl:max-w-[50%] flex flex-row  justify-center items-center mx-auto">
         <img src={selectedImage} alt="placeholder" className="w-full" />
       </div>

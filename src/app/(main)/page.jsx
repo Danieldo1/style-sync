@@ -1,3 +1,4 @@
+import BentoBox from "@/components/BentoBox";
 import Companies from "@/components/Companies";
 import DeepDive from "@/components/DeepDive";
 import Hero from "@/components/Hero";
@@ -16,6 +17,7 @@ export default function Home() {
       <Usage />
       <Showcase />
       <DeepDive />
+      <BentoBox />
     </main>
   );
 }
