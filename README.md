@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# [Stylesync 🔗](https://style-sync.vercel.app/)
 
-## Getting Started
+Welcome to  **Stylesync**, the innovative AI-powered web application that revolutionizes the way you choose your perfect outfit. Leveraging cutting-edge technology, Stylesync offers personalized outfit suggestions based on your own wardrobe.
 
-First, run the development server:
+## What is Stylesync? 🤫
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Stylesync is a SaaS platform that helps users find the perfect outfit combinations from their existing clothing items. With an easy-to-use interface and intelligent AI suggestions, it takes the hassle out of deciding what to wear.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<img src="/public/create.png" width="400" />
+<img src="/public/suggest.png" width="400" />
+<img src="/public/view.png" width="400" />
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## How It Works 🫣
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1.  **User Account**: Create an account or sign in using Google via NextAuth for a seamless authentication experience.
+2.  **Uploading Form**: Once logged in, you're presented with a simple form to upload new clothing items to your virtual wardrobe.
+3.  **AI Background Removal**: Uploaded photos are processed by Replicate AI to remove backgrounds, leaving just the clothing item.
+4.  **AWS S3 Storage**: The processed images are securely stored in an AWS S3 bucket for reliable and scalable access.
+5.  **Categorization and Description**: Assign categories, colors, patterns, and descriptions to your clothing items, ensuring all details are captured with the help of React Hook Form.
+6.  **MongoDB Integration**: Your wardrobe is stored in MongoDB, and after uploading 10 items, the magic begins.
+7.  **AI-Powered Outfit Suggestions**: OpenAI uses your wardrobe and current weather conditions (via a weather API) to suggest customized outfits.
+8.  **Favorites**: Save your favorite outfits for quick access and future inspiration.
+9.  **SaaS Model**: Enjoy free usage up to 20 items, after which a monthly subscription is available for unlimited access.
 
-## Learn More
+## Technologies Used 💻
 
-To learn more about Next.js, take a look at the following resources:
+-   **Frontend**: Built with Next.js 14 and styled using TailwindCSS, ensuring a responsive and modern user interface.
+-   **AI Processing**: Replicate AI for image processing and OpenAI for outfit suggestions.
+-   **Authentication**: Securely handled by NextAuth.
+-   **Storage**: Images are stored in AWS S3, and user data is managed in MongoDB.
+-   **State Management**: Global state is managed with Jotai, synced with MongoDB.
+-   **Payment Processing**: Integrated with Stripe for subscription management.
+-   **UI Components**: ShadCN UI library provides a polished look with support for light and dark modes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Problem Solved 😌
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Stylesync addresses the common dilemma of choosing what to wear by automating outfit selection based on your personal wardrobe, the current weather, and occasion. It's perfect for those who want a hassle-free approach to styling and those interested in making the most out of their clothing collection.
 
-## Deploy on Vercel
+## Get Started 🚀
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To start using Stylesync, simply sign up, upload your clothing items, and let our AI assist you in creating stylish and weather-appropriate outfits every day.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deployed on Vercel
+
+Hosted on the Vercel Platform, Stylesync is designed to offer a seamless and efficient user experience. Visit us  [here](https://style-sync.vercel.app/)  and transform the way you dress!
+
+Thank you for considering Stylesync as your personal wardrobe assistant. We can't wait to help you dress your best with ease and confidence!
