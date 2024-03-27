@@ -81,7 +81,7 @@ const { resolvedTheme } = useTheme();
             />
             <p className="text-3xl font-bold text1 -mb-3">tyleSync</p>
           </div>
-          <div className="flex flex-col h-full justify-between " style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          <div className="flex flex-col h-full justify-between pb-16 md:pb-0" >
             <div className="flex flex-col space-y-4 mt-5 w-full font-semibold ">
               <Link
                 onClick={toggleSidebar}
