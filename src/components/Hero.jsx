@@ -1,6 +1,7 @@
+
 import React from "react";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import LogInBtn from "./LogInBtn";
 
 const Hero = () => {
   return (
@@ -15,16 +16,7 @@ const Hero = () => {
             clothes, suggested by StyleSync.{" "}
           </p>
         </div>
-        <div className="mb-3 w-full flex justify-center items-center">
-          <Button className="mr-5">Get Started</Button>
-          <p>or</p>
-          <Button
-            variant="outline"
-            className="ml-5 z-20 cursor-pointer hover:bg-gray-400 hover:text-white transition-all delay-100 ease-in-out"
-          >
-            Login
-          </Button>
-        </div>
+        <LogInBtn />
         <p>
           Trusted by +1400 happy users{" "}
           <span className="text-yellow-500">★★★★★</span>

@@ -1,3 +1,4 @@
+
 import React from 'react'
 import {
   Card,
@@ -10,7 +11,7 @@ import {
 import { BiSolidZap } from "react-icons/bi";
 import { GoZap } from "react-icons/go";
 
-const SubscriptionPlan = ({ isPro, subscribeUser }) => {
+const SubscriptionPlan = ({ isPro, subscribeUser, showText }) => {
      const pricingPlans = [
        {
          icon: <GoZap />,
@@ -59,7 +60,9 @@ const SubscriptionPlan = ({ isPro, subscribeUser }) => {
       )}
       {!isPro && (
         <>
-          <h3 className="text-3xl font-semibold tracking-wide text-center my-5">
+          <h3
+            className={`text-3xl font-semibold tracking-wide text-center my-5 ${showText ? "block" : "hidden"}`}
+          >
             Pricing Plans
           </h3>
           <div className="flex flex-col md:flex-row md:justify-around md:space-x-4 p-4">

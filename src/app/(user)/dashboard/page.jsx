@@ -48,7 +48,7 @@ const DashboardPage = () => {
           title={`${session.user?.name}`}
           subTitle="Manage your account"
         />
-       <SubscriptionPlan isPro={isPro} subscribeUser={subscribeUser} />
+       <SubscriptionPlan isPro={isPro} subscribeUser={subscribeUser} showText={true} />
         <h3 className="text-3xl font-semibold tracking-wide text-center my-5">
           Frequently Asked Questions
         </h3>
