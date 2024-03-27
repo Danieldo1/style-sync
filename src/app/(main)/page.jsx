@@ -1,6 +1,7 @@
 import BentoBox from "@/components/BentoBox";
 import Companies from "@/components/Companies";
 import DeepDive from "@/components/DeepDive";
+import FAQ from "@/components/FAQ";
 import Hero from "@/components/Hero";
 import PricingCards from "@/components/PricingCards";
 import Review from "@/components/Review";
@@ -22,6 +23,7 @@ export default function Home() {
       <BentoBox />
       <Review />
       <PricingCards />
+      <FAQ />
     </main>
   );
 }

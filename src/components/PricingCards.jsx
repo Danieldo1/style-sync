@@ -7,7 +7,7 @@ const PricingCards = () => {
     
   return (
     <section className="w-full h-full pt-10">
-      <div className="text-center mb-5">
+      <div className="text-center mb-5 px-5">
         <h2 className="text-3xl md:text-5xl font-semibold tracking-wide">
           Simple Pricing,
           <br />

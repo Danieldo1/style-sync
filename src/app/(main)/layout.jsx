@@ -29,19 +29,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <SessionWrapper>
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${josefsans.variable} ${prompt.className}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Nav />
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${josefsans.variable} ${prompt.className}`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+          >
+            <Nav />
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
     </SessionWrapper>
   );
 }
