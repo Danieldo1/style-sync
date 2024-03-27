@@ -81,7 +81,7 @@ const { resolvedTheme } = useTheme();
             />
             <p className="text-3xl font-bold text1 -mb-3">tyleSync</p>
           </div>
-          <div className="flex flex-col h-full justify-between pb-16 md:pb-0" >
+          <div className="flex flex-col h-full justify-between  ">
             <div className="flex flex-col space-y-4 mt-5 w-full font-semibold ">
               <Link
                 onClick={toggleSidebar}
@@ -124,7 +124,7 @@ const { resolvedTheme } = useTheme();
                 <p>Account</p>
               </Link>
             </div>
-            <div className="flex h-fit flex-col justify-end items-center w-full my-2  md:mb-2">
+            <div className="flex h-fit flex-col justify-end items-center w-full my-2 pb-[calc(40vh-200px)] md:mb-2">
               <div className="mb-5">
                 <DarkModeSwitchCustom />
               </div>
