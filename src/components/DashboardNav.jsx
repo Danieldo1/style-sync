@@ -30,12 +30,13 @@ const { resolvedTheme } = useTheme();
    
     if (email) {
       getUserData();
-      setLoading(false);
+     
     } 
   }, [email]);
   const getUserData = async () => {
     const userData = await fetchUserId(email);
     setIsPro(userData.isPro);
+     setLoading(false);
   };
   const activeLink = (path) => {
     if (path === pathname || pathname.includes(path)) {
@@ -124,7 +125,7 @@ const { resolvedTheme } = useTheme();
                 <p>Account</p>
               </Link>
             </div>
-            <div className="flex h-fit flex-col justify-end items-center w-full my-2 pb-[calc(40vh-200px)] md:mb-2">
+            <div className="flex h-fit flex-col justify-end items-center w-full my-2 pb-[calc(40vh-200px)] md:pb-0 md:mb-2">
               <div className="mb-5">
                 <DarkModeSwitchCustom />
               </div>
