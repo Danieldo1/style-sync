@@ -18,13 +18,13 @@ const ImageView = () => {
       return images[imageKey] === selectedImage;
     };
   return (
-    <div className='pb-5'>
+    <div className="pb-5">
       <div className="max-w-85% px-5 md:max-w-[70%] lg:max-w-[60%] xl:max-w-[55%] 2xl:max-w-[50%] flex flex-row  justify-center items-center mx-auto">
         <img src={selectedImage} alt="placeholder" className="w-full" />
       </div>
       <div className="flex flex-row justify-between mt-10 px-2 lg:px-20 xl:px-40 2xl:px-60">
         <div
-          className={`border-t-4 pt-5 hover:border-purple-400 cursor-pointer p-2 transition-all duration-700 ease-in-out ${
+          className={`border-t-4 rounded-tl-md  pt-5 hover:border-purple-400 cursor-pointer p-2 transition-all duration-700 ease-in-out ${
             isSelected("img1") ? "border-purple-400" : "border-gray-400"
           }`}
           onClick={() => handleSelect("img1")}
@@ -48,7 +48,7 @@ const ImageView = () => {
           </p>
         </div>
         <div
-          className={`border-t-4 pt-5 hover:border-purple-400 cursor-pointer p-2 transition-all duration-700 ease-in-out ${
+          className={`border-t-4 pt-5 rounded-tr-md hover:border-purple-400 cursor-pointer p-2 transition-all duration-700 ease-in-out ${
             isSelected("img3") ? "border-purple-400" : "border-gray-400"
           }`}
           onClick={() => handleSelect("img3")}

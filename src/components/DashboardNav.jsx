@@ -24,7 +24,7 @@ export const DashboardNav = () => {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const { data: session } = useSession();
-const { theme } = useTheme();
+const { resolvedTheme } = useTheme();
   const email = session && session.user.email;
   useEffect(() => {
    
@@ -77,7 +77,7 @@ const { theme } = useTheme();
               alt="Logo"
               width={50}
               height={50}
-              className={theme === "dark" ? "" : "invert"}
+              className={resolvedTheme === "dark" ? "" : "invert"}
             />
             <p className="text-3xl font-bold text1 -mb-3">tyleSync</p>
           </div>

@@ -5,7 +5,11 @@ import LogInBtn from "./LogInBtn";
 
 const Hero = () => {
   return (
-    <section className="w-full h-[80vh] bg-border">
+    <section
+      className="w-full h-[80vh] bg-border"
+      id="home"
+     
+    >
       <div className="flex flex-col items-center  justify-center h-full ">
         <div className="mb-3 mt-3">
           <h1 className="text-3xl md:text-5xl  font-bold text-center text1">

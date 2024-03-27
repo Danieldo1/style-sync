@@ -2,7 +2,7 @@ import { Josefin_Sans, Prompt } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "../../components/SessionWrapper";
-
+import { Toaster } from "@/components/ui/toaster";
 import Nav from "@/components/Nav";
 
 const josefsans = Josefin_Sans({
@@ -13,13 +13,13 @@ const josefsans = Josefin_Sans({
   preload: "true",
 });
 
-const prompt =Prompt({
+const prompt = Prompt({
   style: ["normal", "italic"],
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--prompt",
   preload: "true",
-})
+});
 
 export const metadata = {
   title: "StyleSync",
@@ -39,6 +39,7 @@ export default function RootLayout({ children }) {
             <Nav />
             {children}
           </ThemeProvider>
+          <Toaster />
         </body>
       </html>
     </SessionWrapper>

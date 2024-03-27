@@ -243,3 +243,7 @@ Light
 .rotate-270 {
   transform: rotate(270deg);
 }
+
+html {
+  scroll-behavior: smooth;
+}

@@ -2,7 +2,7 @@ import React from "react";
 
 const Usage = () => {
   return (
-    <section className="w-full h-1/2 bg-destructive-foreground text-black">
+    <section className="w-full h-1/2 ">
       <div className="flex flex-col items-center justify-center p-5">
         <h2 className="text-3xl md:text-5xl font-bold my-5">How it works</h2>
         <p className="text-lg text-center -mt-5 md:mt-0 md:px-40">

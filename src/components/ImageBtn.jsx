@@ -18,10 +18,10 @@ const ImageBtn = () => {
       <div className="flex justify-start md:justify-center items-center flex-row w-full mx-10 mb-5 overflow-auto scrollbar-hide">
         {Object.entries(images).map(([key, imagePath]) => (
           <button
-            className={`p-2 md:p-3 border-blue-300 border-[1px] font-medium tracking-wide rounded-lg mx-1 md:mx-3  ${
+            className={`p-2 md:p-3 border-border border-[1px] font-medium tracking-wide rounded-lg mx-1 md:mx-3  ${
               isSelected(imagePath)
-                ? "bg-blue-500 text-background "
-                : "bg-secondary text-foreground hover:bg-blue-500 hover:text-background transition-all duration-300 ease-in-out"
+                ? "bg-foreground text-background "
+                : "bg-secondary text-foreground hover:bg-background hover:text-foreground/70 transition-all duration-300 ease-in-out"
             }`}
             onClick={() => setCurrentImage(imagePath)}
             key={key}

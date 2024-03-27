@@ -6,7 +6,7 @@ import {  signIn, } from "next-auth/react";
 const PricingCards = () => {
     
   return (
-    <section className="w-full h-full pt-10">
+    <section className="w-full h-full pt-10" id="pricing">
       <div className="text-center mb-5 px-5">
         <h2 className="text-3xl md:text-5xl font-semibold tracking-wide">
           Simple Pricing,

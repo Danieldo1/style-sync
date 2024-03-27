@@ -33,14 +33,14 @@ const images = [
 ];
 
 const Review = () => {
-  const [selectedText, setSelectedText] = useState(images[0]);
+  const [selectedText, setSelectedText] = useState(images[1]);
 const { theme } = useTheme();
 
   const handleImageClick = (review) => {
     setSelectedText(review);
   };
   return (
-    <section className="bg-border w-full h-[30%] pt-10">
+    <section className="bg-border w-full h-[30%] pt-10" id="reviews">
       <div className="h-full w-full">
         <div className="flex flex-col text-center">
           <h3 className="text-2xl md:text-3xl text1 tracking-wide leading-tight px-4 md:px-10 lg:px-20 xl:px-40 2xl:px-60">
@@ -64,8 +64,8 @@ const { theme } = useTheme();
               alt="placeholder"
               className={`w-16 h-20 md:w-28 cursor-pointer transition-all delay-300 ease-in-out ${
                 selectedText.srcCompany === image.srcCompany
-                  ? "scale-110 -translate-y-2"
-                  : "opacity-50"
+                  ? "scale-125 -translate-y-4"
+                  : "opacity-50 hover:opacity-100 hover:scale-125 hover:-translate-y-4"
               }
               ${theme === "dark" ? "invert" : ""}
               `}
