@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-
+import { useTheme } from "next-themes";
 const images = [
   {
     srcPerson: "https://randomuser.me/api/portraits/men/91.jpg",
@@ -34,7 +34,7 @@ const images = [
 
 const Review = () => {
   const [selectedText, setSelectedText] = useState(images[0]);
-
+const { theme } = useTheme();
 
   const handleImageClick = (review) => {
     setSelectedText(review);
@@ -62,11 +62,13 @@ const Review = () => {
               key={index}
               src={image.srcCompany}
               alt="placeholder"
-              className={`w-28 h-20 cursor-pointer transition-all delay-300 ease-in-out ${
+              className={`w-16 h-20 md:w-28 cursor-pointer transition-all delay-300 ease-in-out ${
                 selectedText.srcCompany === image.srcCompany
                   ? "scale-110 -translate-y-2"
-                  : ""
-              }`}
+                  : "opacity-50"
+              }
+              ${theme === "dark" ? "invert" : ""}
+              `}
               onClick={() =>
                 handleImageClick({
                   text: image.text,
