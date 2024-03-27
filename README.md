@@ -6,9 +6,9 @@ Welcome to  **Stylesync**, the innovative AI-powered web application that revolu
 
 Stylesync is a SaaS platform that helps users find the perfect outfit combinations from their existing clothing items. With an easy-to-use interface and intelligent AI suggestions, it takes the hassle out of deciding what to wear.
 
-<img src="/public/create.png" width="400" />
-<img src="/public/suggest.png" width="400" />
-<img src="/public/view.png" width="400" />
+<img src="/public/create.png" width="800" />
+<img src="/public/suggest.png" width="800" />
+<img src="/public/view.png" width="800" />
 
 ## How It Works 🫣
 
