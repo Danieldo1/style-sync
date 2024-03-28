@@ -82,7 +82,8 @@ const ViewFavorite = () => {
             .map((_, index) => <LoadingFav key={index} />)
         ) : (
           <>
-            {favorites && favorites.itemsGroupedByOutfit ? (
+            {favorites &&
+            Object.keys(favorites.itemsGroupedByOutfit).length > 0 ? (
               Object.entries(favorites.itemsGroupedByOutfit).map(
                 ([outfitId, items], outfitIndex) => (
                   <div
@@ -126,9 +127,12 @@ const ViewFavorite = () => {
                   className="object-cover "
                 />
 
-                <Link href="/outfit" className="bg-secondary my-5 p-2 px-3 rounded-md border-primary border-[1px] hover:border-secondary hover:bg-primary text-primary hover:text-secondary transition-all duration-300 ease-in">
+                <Link
+                  href="/outfit"
+                  className="bg-secondary my-5 p-2 px-3 rounded-md border-primary border-[1px] hover:border-secondary hover:bg-primary text-primary hover:text-secondary transition-all duration-300 ease-in"
+                >
                   <p className="text-center text-2xl font-semibold">
-                    Lets create outfits 
+                    Lets create outfits
                   </p>
                 </Link>
               </div>
