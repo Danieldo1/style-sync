@@ -32,15 +32,16 @@ const Nav = () => {
             {session ? (
               <>
                 <li>
-                  <Link href="/clothes">
+                  <Link href="/clothes" className="flex items-center space-x-2 hover:bg-white/10 p-2 rounded-md">
                     <div className="w-[30px] h-[30px] relative ">
                       <Image
-                        src={session.user?.image}
+                        src={session.user?.image || "/user.svg"}
                         fill
                         alt=""
                         className="object-cover rounded-full"
                       />
                     </div>
+                    <p >Dashboard</p>
                   </Link>
                 </li>
               </>
