@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
             
           >
             
-            <main className="flex h-screen ">
+            <main className="flex h-[100dvh] md:h-screen ">
               <Providers >
               <DashboardNav />
               <div className="w-full ml-10 mr-4 my-1 overflow-auto scrollbar-hide">

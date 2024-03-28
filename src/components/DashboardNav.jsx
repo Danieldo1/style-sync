@@ -140,13 +140,13 @@ const getUserData = async () => {
                 <p>Account</p>
               </Link>
             </div>
-            <div className="flex h-fit flex-col justify-end items-center w-full my-2 pb-2 md:pb-0 md:mb-2">
+            <div className="flex h-fit flex-col justify-end items-center w-full my-2  md:pb-0 md:mb-2">
               <div className="mb-5">
                 <DarkModeSwitchCustom />
               </div>
               {isPro === false && (
                 <div className="w-full mb-5 ">
-                  <ProUser email={email} loading={loading} />
+                  <ProUser email={email} loading={loading} isPending={isPending} />
                 </div>
               )}
 

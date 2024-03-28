@@ -9,27 +9,25 @@ import Link from "next/link";
 import {useAtom} from 'jotai'
 import { countAtom,incrementAtomCount,decrementAtomCount } from "@/lib/atomStore";
 
-const ProUser = ({ email,loading }) => {
-
-    const [count, setCount] = useAtom(countAtom);
+const ProUser = ({ email, loading, isPending }) => {
+  const [count, setCount] = useAtom(countAtom);
 
   useEffect(() => {
     if (email) {
-        fetchAndSetCount();
+      fetchAndSetCount();
     }
-}, [email,setCount]);
-  
-const fetchAndSetCount = async () => {
-  const fetchedCount = await getCount(email); 
- setCount(fetchedCount);
-};
+  }, [email, setCount]);
 
+  const fetchAndSetCount = async () => {
+    const fetchedCount = await getCount(email);
+    setCount(fetchedCount);
+  };
 
- const progressPercentage = (count / 20) * 100;
+  const progressPercentage = (count / 20) * 100;
 
   return (
     <>
-      {loading === true ? (
+      {loading === true || isPending ? (
         <div className=" rounded-lg  w-full animate-pulse">
           <div className="bg-gray-300 h-5 w-1/2 mb-4 mx-auto"></div>{" "}
           <div className="bg-gray-300 h-6 w-full rounded-full mb-2 "></div>{" "}
@@ -58,6 +56,6 @@ const fetchAndSetCount = async () => {
       )}
     </>
   );
-}
+};
 
 export default ProUser;
