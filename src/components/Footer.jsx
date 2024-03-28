@@ -72,7 +72,7 @@ const Footer = () => {
               variant="link"
               className="py-0 px-0 md:text-base"
               onClick={() => {
-                signIn("google", { callbackUrl: "/clothes" });
+                signIn(["google", "credentials"], { callbackUrl: "/clothes" });
               }}
             >
               Sign in

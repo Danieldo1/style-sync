@@ -45,7 +45,7 @@ const DashboardPage = () => {
     return (
       <div className="w-full h-full flex flex-col ">
         <Heading
-          title={`${session.user?.name}`}
+          title={`${session.user?.name || session.user?.email.split("@")[0]}`}
           subTitle="Manage your account"
         />
        <SubscriptionPlan isPro={isPro} subscribeUser={subscribeUser} showText={true} />

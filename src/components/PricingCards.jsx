@@ -22,7 +22,7 @@ const PricingCards = () => {
         <SubscriptionPlan
           isPro={false}
           subscribeUser={() => {
-            signIn("google", { callbackUrl: "/dashboard" });
+            signIn(["google", "credentials"], { callbackUrl: "/dashboard" });
           }}
           showText={false}
         />

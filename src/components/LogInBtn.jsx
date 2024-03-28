@@ -6,7 +6,9 @@ const LogInBtn = () => {
   return (
     <div className="mb-5 w-full flex justify-center items-center">
       <Button
-        onClick={() => signIn("google", { callbackUrl: "/clothes" })}
+        onClick={() =>
+          signIn(["google", "credentials"], { callbackUrl: "/clothes" })
+        }
         className="mr-5"
       >
         Get Started
@@ -15,7 +17,12 @@ const LogInBtn = () => {
       <Button
         variant="outline"
         className="ml-5 z-20 cursor-pointer hover:bg-gray-400 hover:text-white transition-all delay-100 ease-in-out"
-        onClick={() => signIn("google")}
+        onClick={() =>
+          signIn(
+            ["google", "credentials"],
+            { callbackUrl: "/clothes" },
+          )
+        }
       >
         Login
       </Button>

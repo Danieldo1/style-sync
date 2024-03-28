@@ -26,7 +26,7 @@ export const fetchUserId = async (email) => {
     image: user.image,
     emailVerified: user.emailVerified,
     isPro: user.isPro,
-    subscribedOn: user.subscribedOn.toISOString(),
+    subscribedOn: user?.subscribedOn?.toISOString() || null,
     updatedAt: user.updatedAt.toISOString(),
     items: user.items,
   };

@@ -49,7 +49,9 @@ const Nav = () => {
                 <li>
                   <Button
                     onClick={() => {
-                      signIn("google", { callbackUrl: "/clothes" });
+                      signIn(["google", "credentials"], {
+                        callbackUrl: "/clothes",
+                      });
                     }}
                   >
                     Sign in

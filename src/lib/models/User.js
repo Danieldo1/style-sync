@@ -16,6 +16,7 @@ const UserSchema = new Schema(
     type:Schema.Types.ObjectId,
     ref:'Users'
    },
+   password: String,
     items: [ItemSchema],
    count:{
     type:Number,

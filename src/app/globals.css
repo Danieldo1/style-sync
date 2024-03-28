@@ -247,4 +247,8 @@ Light
 html {
   scroll-behavior: smooth;
 }
-
+label.section-header[for="input-create-for-credentials-provider"] {
+    font-size: 16px;
+    color: #333333;
+    text-align: center;
+}
