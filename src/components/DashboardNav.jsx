@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "./ui/button";
@@ -21,23 +21,38 @@ import {useTheme} from "next-themes";
 export const DashboardNav = () => {
   const [shown, setShown] = useState(true);
   const [isPro, setIsPro] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true)
+  const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
   const { data: session } = useSession();
 const { resolvedTheme } = useTheme();
   const email = session && session.user.email;
-  useEffect(() => {
-   
-    if (email) {
-      getUserData();
-     
-    } 
-  }, [email]);
-  const getUserData = async () => {
+   useEffect(() => {
+     if (email) {
+       // Wrap the state update that triggers the heavy work in startTransition
+       startTransition(() => {
+         getUserData();
+       });
+     } else {
+       setLoading(true);
+     }
+   }, [email]);
+
+  
+const getUserData = async () => {
+  try {
+    setLoading(true);
     const userData = await fetchUserId(email);
     setIsPro(userData.isPro);
-     setLoading(false);
-  };
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+  } finally {
+    // This state update is part of the transition
+    startTransition(() => {
+      setLoading(false);
+    });
+  }
+};
   const activeLink = (path) => {
     if (path === pathname || pathname.includes(path)) {
       return "bg-muted-foreground text-background";
