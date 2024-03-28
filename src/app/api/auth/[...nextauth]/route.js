@@ -44,19 +44,23 @@ const handler = NextAuth({
         const password = credentials?.password;
         await connectDB();
         const user = await User.findOne({ email: email });
-        const createUser = await User.create({
-          email: email,
-          password: password,
-        });
+
+        // Create a new user only if no existing user is found
         if (!user) {
+          const createUser = await User.create({
+            email: email,
+            password: password,
+          });
           return createUser;
         }
-        if (user && user.password === password) {
+
+        // If a user is found and the password matches, return the user
+        if (user.password === password) {
           return user;
         } else {
           return null;
         }
-      },
+      }
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
