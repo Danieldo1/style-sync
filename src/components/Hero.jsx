@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import LogInBtn from "./LogInBtn";
 
+
 const Hero = () => {
   return (
     <section
@@ -21,10 +22,7 @@ const Hero = () => {
           </p>
         </div>
         <LogInBtn />
-        <p>
-          Trusted by +1400 happy users{" "}
-          <span className="text-yellow-500">★★★★★</span>
-        </p>
+        
         <div className="w-full flex justify-center rounded-lg mt-12 relative h-full md:mt-2 md:mb-0">
           <div className="absolute w-40 h-40 z-10 right-[11rem] lg:right-[20rem] xl:right-[30rem] -top-[7rem] -rotate-[110deg] hidden md:block">
             <img src="/arrow.svg" alt="arrow" className="w-full h-full " />

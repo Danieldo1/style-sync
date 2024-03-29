@@ -16,8 +16,8 @@ const BentoBox = () => {
           <p className="text-base md:text-lg mb-4">
             Get suggestion from AI and discover your next look
           </p>
-          <div className="flex  flex-row items-center">
-            <p className="text-sm md:text-base mr-2">Learn more</p>
+          <div className="flex  flex-row items-center hover:text-black/30 cursor-pointer transition-all delay-100 ease-in-out duration-300">
+            <p className="text-sm md:text-base mr-2 ">Learn more</p>
             <FaArrowAltCircleRight />
           </div>
           <img src="/community.png" alt="placeholder" />
@@ -31,15 +31,11 @@ const BentoBox = () => {
             Find your next look with the latest trends, based of your
             preferences
           </p>
-          <div className="flex  flex-row items-center">
-            <p className="text-sm md:text-base mr-2">Learn more</p>
+          <div className="flex  flex-row items-center hover:text-black/30 cursor-pointer transition-all delay-100 ease-in-out duration-300">
+            <p className="text-sm md:text-base mr-2 ">Learn more</p>
             <FaArrowAltCircleRight />
           </div>
-          <img
-            src="/discover.png"
-            alt="placeholder"
-            className="md:hidden"
-          />
+          <img src="/discover.png" alt="placeholder" className="md:hidden" />
           <div className="w-1/2 hidden md:flex items-center justify-center">
             <img
               src="/discover.png"
@@ -59,7 +55,7 @@ const BentoBox = () => {
                 With hundreds of various ways to organize your clothes and
                 discover new outfits
               </p>
-              <div className="flex  flex-row items-center">
+              <div className="flex  flex-row items-center hover:text-black/30 cursor-pointer transition-all delay-100 ease-in-out duration-300">
                 <p className="text-sm md:text-base mr-2">Learn more</p>
                 <FaArrowAltCircleRight />
               </div>
